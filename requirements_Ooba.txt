@@ -1,0 +1,12 @@
+requests~=2.31.0
+beautifulsoup4~=4.12.2
+aichar~=0.5.1
+sdkit~=2.0.15
+torch~=2.1.2+cu118
+argparse~=1.4.0
+tqdm~=4.65.0
+langchain~=0.0.341
+gradio~=3.41.2
+diffusers~=0.20.2
+Pillow~=9.5.0
+numpy~=1.23.5

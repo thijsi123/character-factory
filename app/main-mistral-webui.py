@@ -276,6 +276,7 @@ female, anime, Petite and delicate frame, Raven-black hair flowing down to her w
         example_dialogue
         + "\n[INST] create a prompt that lists the appearance "
         + "characteristics of a character whose summary is "
+        + "if lack of info, generate something based on available info."
         + f" {character_summary}. Topic: {topic} [/INST]\n"
     )
     print(sd_prompt)
