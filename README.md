@@ -16,6 +16,7 @@ This Python script is designed to help you generate characters for [SillyTavern]
 
 <div>
   <h2>Character made using oobabooga/text-generation-webui Mistral 7b instruct 0.2 using 8k tokens</h2>
+  <h3>This character has a mistake that I'm too lazy to adjust, everything should work as intended.</h3>
   <img src="https://github.com/thijsi123/character-factory/blob/master/examples/Kaori/Kaori.card.png?raw=true" width="300" height="300" alt="Grumpy Purrsnatch character card">
 </div>
 
