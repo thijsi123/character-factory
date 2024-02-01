@@ -1,5 +1,7 @@
 # Character factory
 
+<p>WebUI Supports <a href="https://github.com/oobabooga/text-generation-webui" style="color: blue; text-decoration: underline;" target="_blank">oobabooga/text-generation-webui</a></p>
+
 WebUI using Mistral 7b instruct 0.1:
 <a target="_blank" href="https://colab.research.google.com/drive/108koWoCDGaLZhZ0eV-gFuWtsnnLFMeCB">
   <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/>
@@ -13,6 +15,14 @@ WebUI using Zephyr 7B beta:
 This Python script is designed to help you generate characters for [SillyTavern](https://github.com/SillyTavern/SillyTavern), [TavernAI](https://github.com/TavernAI/TavernAI), [TextGenerationWebUI](https://github.com/oobabooga/text-generation-webui) and many more, using LLM (Large Language Model) and Stable Diffusion. The script utilizes various deep learning models to create detailed character cards, including names, summaries, personalities, greeting messages, and character avatars.
 
 <div>
+  <h2>Character made using oobabooga/text-generation-webui Mistral 7b instruct 0.2 using 8k tokens</h2>
+  <h3>This character has a mistake that I'm too lazy to adjust, everything should work as intended.</h3>
+  <img src="https://github.com/thijsi123/character-factory/blob/master/examples/Kaori/Kaori.card.png?raw=true" width="300" height="300" alt="Grumpy Purrsnatch character card">
+</div>
+
+
+<div>
+  <h2>Characters from the main repository (could be reproduced using zephyr and mistral scripts)</h2>
   <img src="https://github.com/Hukasx0/character-factory/blob/main/examples/Grumpy_Purrsnatch/Grumpy_Purrsnatch.card.png?raw=true" width="300" height="300" alt="Grumpy Purrsnatch character card">
   <img src="https://github.com/Hukasx0/character-factory/blob/main/examples/Lily_Harper/Lily_Harper.card.png?raw=true" width="300" height="300" alt="Lily Harper character card">
   <img src="https://github.com/Hukasx0/character-factory/blob/main/examples/Arthondt_Lightbringer/Arthondt_Lightbringer.card.png?raw=true" width="300" height="300" alt="Arthondt Lightbringer character card">
