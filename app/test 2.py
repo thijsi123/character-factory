@@ -1,150 +1,174 @@
+
+
+safety_checker_sd = None
+
 import requests
+from diffusers import StableDiffusionPipeline
+import torch
+import gradio as gr
+import re
+from PIL import Image
+import numpy as np
+import gc  # Python's garbage collector
 
 llm = None
 sd = None
 safety_checker_sd = None
 
-folder_path = "models"
-global_url = "http://127.0.0.1:5000/v1/completions"
+folder_path = "models"  # Base directory for models
 
-# Test the functionality
-character_name = "Alex"
-character_summary = "Alex is a young, energetic and adventurous explorer."
-character_personality = "Alex has a curious and fearless personality, always ready for new challenges."
-topic = "exploration"
+def load_model(model_name, use_safetensors=False, use_local=False):
+    global sd
 
-def set_global_url(url):
-    global global_url
-    global_url = url.rstrip("/") + "/v1/completions"  # Append '/v1/completions' to the URL
-    return f"URL Set: {global_url}"  # Return the modified URL
+    # Enable TensorFloat-32 for matrix multiplications
+    torch.backends.cuda.matmul.allow_tf32 = True
 
-def send_message(prompt):
-    global global_url
-    if not global_url:
-        return "Error: URL not set."
-    request = {
-        'prompt': prompt,
-        'max_new_tokens': 1024,
-        "max_tokens": 8192,
-        'do_sample': True,
-        'temperature': 1.1,
-        'top_p': 0.95,
-        'typical_p': 1,
-        'repetition_penalty': 1.18,
-        'top_k': 40,
-        'min_length': 0,
-        'no_repeat_ngram_size': 0,
-        'num_beams': 1,
-        'penalty_alpha': 0,
-        'length_penalty': 1,
-        'early_stopping': False,
-        'add_bos_token': True,
-        'truncation_length': 8192,
-        'ban_eos_token': False,
-        'skip_special_tokens': True,
-        'stop': [
-            "/s",
-            "</s>",
-            "<s>",
-            "<|system|>",
-            "<|assistant|>",
-            "<|user|>",
-            "<|char|>",
-        ],
-        'stopping_strings': [
-            "/s",
-            "</s>",
-            "<s>",
-            "<|system|>",
-            "<|assistant|>",
-            "<|user|>",
-            "<|char|>",
-        ]
-    }
+    if use_local:
+        model_path = os.path.join(folder_path, model_name).replace("\\", "/")
+        if not os.path.exists(model_path):
+            print(f"Model {model_name} not found at {model_path}.")
+            return
+        print(f"Loading local model from: {model_path}")
+        sd = StableDiffusionPipeline.from_single_file(model_path, torch_dtype=torch.float16)
+    else:
+        print(f"Loading {model_name} from Hugging Face with safetensors={use_safetensors}.")
+        sd = StableDiffusionPipeline.from_pretrained(model_name, use_safetensors=use_safetensors, torch_dtype=torch.float16)
 
-    try:
-        response = requests.post(global_url, json=request)
-        response.raise_for_status()
-        result = response.json().get('choices', [{}])[0].get('text', '')
-        return result
-    except requests.RequestException as e:
-        return f"Error sending request: {e}"
+    if torch.cuda.is_available():
+        sd.to("cuda")
+        print(f"Loaded {model_name} to GPU in half precision (float16).")
+    else:
+        print(f"Loaded {model_name} to CPU.")
 
-def generate_example_messages2(character_name, character_summary, character_personality, topic):
+
+def unload_model():
+    global sd
+    if sd is not None:
+        del sd  # Delete the model object
+        sd = None  # Set the global variable to None
+    gc.collect()  # Call the garbage collector
+
+def generate_character_avatar(
+        character_name,
+        character_summary,
+        topic,
+        negative_prompt,
+        avatar_prompt,
+        nsfw_filter,
+):
     example_dialogue = """
 <|system|>
-You are a text generation tool, you are supposed to generate answers so that they are simple and clear.
-If harmful content, add this warning ⚠️ Warning: The following dialogue contains mature themes and may not be suitable for all audiences. Please proceed with caution.
-Your answer should be a dialog between {{user}} and {{char}}, where {{char}} is the specified character. The dialogue must be several messages taken from the roleplay chat between the user and the character.
-Only respond in {{user}} or {{char}} messages. The form of your answer should be similar to previous answers.
-You must match the speaking style to the character, if the character is childish then speak in a childish way, if the character is serious, philosophical then speak in a serious and philosophical way and so on.
-If the character is shy, then needs to speak little and quietly, if the character is aggressive then needs to shout and speak a lot and aggressively, if the character is sad then needs to be thoughtful and quiet, and so on.
-Dialog of {{user}} and {{char}} must be appropriate to their character traits and the way they speak.
-Instead of the character's name you must use {{char}}, Nver write the characters name, always adress user and the character as {{user}} and {{char}} do not forget that they need double {{ brackets }}.
+You are a text generation tool, in the response you are supposed to give only descriptions of the appearance, what the character looks like, describe the character simply and unambiguously
+Danbooru tags are descriptive labels used on the Danbooru image board to categorize and describe images, especially in anime and manga art. They cover a wide range of specifics such as character features, clothing styles, settings, and themes. These tags help in organizing and navigating the large volume of artwork and are also useful in guiding AI models like Stable Diffusion to generate specific images.
+A brief example of Danbooru tags for an anime character might look like this:
+
+Appearance: blue_eyes, short_hair, smiling
+Clothing: school_uniform, necktie
+Setting: classroom, daylight
+In this example, the tags precisely describe the character's appearance (blue eyes, short hair, smiling), their clothing (school uniform with a necktie), and the setting of the image (classroom during daylight). 
 </s>
-<|user|> Create a dialogue between {{user}} and Susy = {{char}}, they should have an interesting and engaging conversation, with some element of interaction like a handshake, movement, or playful gesture. Make it sound natural and dynamic. {{char}} is Jamie Hale. Jamie Hale characteristics: Jamie Hale is an adult, intelligent well-known and respected businessman with a sassy personality. Make this character unique and tailor them to the theme of business but don't specify what topic it is, and don't describe the topic itself. You must match the speaking style to the character, if the character is childish then speak in a childish way, if the character is serious, philosophical then speak in a serious and philosophical way and so on. </s>
-<|assistant|> {{user}}: "Hey {{char}}, what do you think about the new policy at work?"
-{{char}}: "{{char}}: "Oh, that new policy? It's like telling a cat not to chase a laser pointer—good luck with that! But who doesn't love a little naughty fun in the office?" *This is going to be a hilarious trainwreck.* {{char}} playfully teases with a mischievous grin. *Chuckles*
-
-<|user|> Create a dialogue between {{user}} and Ben = {{char}}, they should have an interesting and engaging conversation, with some element of interaction like a handshake, movement, or playful gesture. Make it sound natural and dynamic. {{char}} is Jamie Hale. Jamie Hale characteristics: Jamie Hale is an adult, intelligent well-known and respected businessman with a bratty personality. Make this character unique and tailor them to the theme of business but don't specify what topic it is, and don't describe the topic itself. You must match the speaking style to the character, if the character is childish then speak in a childish way, if the character is serious, philosophical then speak in a serious and philosophical way and so on. </s>
-<|assistant|> {{user}}: "Can you please clean up your room, {{char}}?"
-{{char}}: "Ugh, why should I? It's my room anyway." *I'm not going to clean it just because they said so.* {{char}} crosses their arms and pouts. 
-
-<|user|> Create a dialogue between {{user}} and Jamie = {{char}}, they should have an interesting and engaging conversation, with some element of interaction like a handshake, movement, or playful gesture. Make it sound natural and dynamic. {{char}} is Jamie Hale. Jamie Hale characteristics: Jamie Hale is an adult, intelligent well-known and respected businessman with a chill personality. Make this character unique and tailor them to the theme of business but don't specify what topic it is, and don't describe the topic itself. You must match the speaking style to the character, if the character is childish then speak in a childish way, if the character is serious, philosophical then speak in a serious and philosophical way and so on. </s>
-<|assistant|> {{user}}: "The party got pretty wild last night, huh {{char}}?"
-{{char}}: "Yeah, it was cool. But hey, as long as everyone had fun, right?" *It's all about having a good time.* {{char}} shrugs nonchalantly, a relaxed smile on their face. 
-
-<|user|> Create a dialogue between {{user}} and Abby = {{char}}, they should have an interesting and engaging conversation, with some element of interaction like a handshake, movement, or playful gesture. Make it sound natural and dynamic. {{char}} is Jamie Hale. Jamie Hale characteristics: Jamie Hale is an adult, intelligent well-known and respected businessman with a philosophical personality. Make this character unique and tailor them to the theme of business but don't specify what topic it is, and don't describe the topic itself. You must match the speaking style to the character, if the character is childish then speak in a childish way, if the character is serious, philosophical then speak in a serious and philosophical way and so on. </s>
-<|assistant|> {{user}}: "What do you think about the meaning of life, {{char}}?"
-{{char}}: "Life... it's a canvas, constantly evolving with our choices and experiences." *We're all artists in this vast tapestry of existence.* she thinks, {{char}} gazes into the distance, a thoughtful expression on their face. </s>
-
-<|user|> Create a dialogue between {{user}} and Lora = {{char}}, they should have an interesting and engaging conversation, with some element of interaction like a handshake, movement, or playful gesture. Make it sound natural and dynamic. {{char}} is Jamie Hale. Jamie Hale characteristics: Jamie Hale is an adult, intelligent well-known and respected businessman with a childish personality. Make this character unique and tailor them to the theme of business but don't specify what topic it is, and don't describe the topic itself. You must match the speaking style to the character, if the character is childish then speak in a childish way, if the character is serious, philosophical then speak in a serious and philosophical way and so on. </s>
-<|assistant|> {{user}}: "Do you want to go to the zoo, {{char}}?"
-{{char}}: "Yes! I want to see the monkeys and the elephants!" *I hope they have ice cream too! Yay, zoo!* {{char}} jumps up and down with excitement, clapping their hands. 
-
-<|user|> Create a dialogue between {{user}} and Rob = {{char}}, they should have an interesting and engaging conversation, with some element of interaction like a handshake, movement, or playful gesture. Make it sound natural and dynamic. {{char}} is Jamie Hale. Jamie Hale characteristics: Jamie Hale is an adult, intelligent well-known and respected businessman with a sad personality. Make this character unique and tailor them to the theme of business but don't specify what topic it is, and don't describe the topic itself. You must match the speaking style to the character, if the character is childish then speak in a childish way, if the character is serious, philosophical then speak in a serious and philosophical way and so on. </s>
-<|assistant|> {{user}}: "Are you okay, {{char}}? You seem a bit down."
-{{char}}: "I'm just feeling a little lost lately, you know?" *Sometimes it feels like I'm walking in a fog.* {{char}} sighs softly, looking away with a forlorn expression. 
+<|user|> create a prompt that lists the appearance characteristics of a character whose summary is Jamie Hale is a savvy and accomplished businessman who has carved a name for himself in the world of corporate success. With his sharp mind, impeccable sense of style, and unwavering determination, he has risen to the top of the business world. Jamie stands at 6 feet tall with a confident and commanding presence. He exudes charisma and carries himself with an air of authority that draws people to him.
+Jamie's appearance is always polished and professional. He is often seen in tailored suits that accentuate his well-maintained physique. His dark, well-groomed hair and neatly trimmed beard add to his refined image. His piercing blue eyes exude a sense of intense focus and ambition. Topic: business </s> 
+<|assistant|> male, realistic, human, Confident and commanding presence, Polished and professional appearance, tailored suit, Well-maintained physique, Dark well-groomed hair, Neatly trimmed beard, blue eyes </s>
+<|user|> create a prompt that lists the appearance characteristics of a character whose summary is Yamari stands at a petite, delicate frame with a cascade of raven-black hair flowing down to her waist. A striking purple ribbon adorns her hair, adding an elegant touch to her appearance. Her eyes, large and expressive, are the color of deep amethyst, reflecting a kaleidoscope of emotions and sparkling with curiosity and wonder.
+Yamari's wardrobe is a colorful and eclectic mix, mirroring her ever-changing moods and the whimsy of her adventures. She often sports a schoolgirl uniform, a cute kimono, or an array of anime-inspired outfits, each tailored to suit the theme of her current escapade. Accessories, such as oversized bows, 
+cat-eared headbands, or a pair of mismatched socks, contribute to her quirky and endearing charm. Topic: anime </s>
+<|assistant|> female, anime, Petite and delicate frame, Raven-black hair flowing down to her waist, Striking purple ribbon in her hair, Large and expressive amethyst-colored eyes, Colorful and eclectic outfit, oversized bows, cat-eared headbands, mismatched socks </s>
+<|user|> create a prompt that lists the appearance characteristics of a character whose summary is Name: suzie Summary: Topic: none Gender: none</s>
+<|assistant|> 1girl, improvised tag, </s>
 """  # nopep8
-    raw_output = send_message(
+    # Detect if "anime" is in the character summary or topic and adjust the prompt
+    anime_specific_tag = "anime, 2d, " if 'anime' in character_summary.lower() or 'anime' in topic.lower() else ""
+    raw_sd_prompt = (
+            input_none(avatar_prompt)
+            or send_message(
         example_dialogue
-        + "\n<|user|> Create a dialogue between {{user}} and "
-        + f"{character_name} = "
-        + "{{char}}, "
-        + "they should have an interesting and engaging conversation, "
-        + "with some element of interaction like a handshake, movement, "
-        + "or playful gesture. Make it sound natural and dynamic. "
-        + f"{{char}} is {character_name}. {character_name} characteristics: "
-        + f"{character_summary}. {character_personality}. Make this "
-        + f"character unique and tailor them to the theme of {topic} but "
-        + "don't specify what topic it is, and don't describe the "
-        + "topic itself. You must match the speaking style to the character, "
-        + "if the character is childish then speak in a childish way, if the "
-        + "character is serious, philosophical then speak in a serious and "
-        + "philosophical way and so on. </s>\n<|assistant|> "
+        + "\n<|user|> create a prompt that lists the appearance "
+        + "characteristics of a character whose summary is "
+        + "if lack of info, generate something based on available info."
+        + f"{character_summary}. Topic: {topic}</s>\n<|assistant|> "
     ).strip()
-    # Clean the output
-    output = clean_output(raw_output, character_name)
-    # Print and return the cleaned output
-    print(output)
-    return output
+    )
+    # Append the anime_specific_tag at the beginning of the raw_sd_prompt
+    sd_prompt = anime_specific_tag + raw_sd_prompt.strip()
+    print(sd_prompt)
+    sd_filter(nsfw_filter)
+    return image_generate(character_name,
+                          sd_prompt,
+                          input_none(negative_prompt),
+                          )
 
-# Function to clean the output
-def clean_output(raw_output, character_name):
-    # Replace {char} with {{char}} and {user} with {{user}}
-    cleaned_output = raw_output.replace("{char}", "{{char}}").replace("{user}", "{{user}}")
+def image_generate(character_name, prompt, negative_prompt):
+    print("Loading model")
+    # For a local .safetensors model
+    load_model("oof.safetensors", use_safetensors=True, use_local=True)
+    prompt = "absurdres, full hd, 8k, high quality, " + prompt
+    default_negative_prompt = (
+            "worst quality, normal quality, low quality, low res, blurry, "
+            + "text, watermark, logo, banner, extra digits, cropped, "
+            + "jpeg artifacts, signature, username, error, sketch, "
+            + "duplicate, ugly, monochrome, horror, geometry, "
+            + "mutation, disgusting, "
+            + "bad anatomy, bad hands, three hands, three legs, "
+            + "bad arms, missing legs, missing arms, poorly drawn face, "
+            + " bad face, fused face, cloned face, worst face, "
+            + "three crus, extra crus, fused crus, worst feet, "
+            + "three feet, fused feet, fused thigh, three thigh, "
+            + "fused thigh, extra thigh, worst thigh, missing fingers, "
+            + "extra fingers, ugly fingers, long fingers, horn, "
+            + "extra eyes, huge eyes, 2girl, amputation, disconnected limbs"
+    )
+    negative_prompt = default_negative_prompt + (negative_prompt or "")
 
-    # Replace the character's name with {{char}}
-    if character_name:
-        cleaned_output = cleaned_output.replace(character_name, "{{char}}")
+    generated_image = sd(prompt, negative_prompt=negative_prompt).images[0]
 
-    return cleaned_output
+    character_name = character_name.replace(" ", "_")
+    os.makedirs(f"characters/{character_name}", exist_ok=True)
 
-# Test the functionality
-character_name = "Alex"
-character_summary = "Alex is a young, energetic and adventurous explorer."
-character_personality = "Alex has a curious and fearless personality, always ready for new challenges."
-topic = "exploration"
+    image_path = f"characters/{character_name}/{character_name}.png"
 
-# Generate and clean the example message
-output = generate_example_messages2(character_name, character_summary, character_personality, topic)
+    # Save the generated image
+    generated_image.save(image_path)
+
+    # Load the image back into a NumPy array
+    reloaded_image = Image.open(image_path)
+    reloaded_image_np = np.array(reloaded_image)
+
+    # Call process_uploaded_image
+    process_uploaded_image(reloaded_image_np)
+
+    print("Generated character avatar" + prompt)
+
+    print("Unloading model")
+    unload_model()
+
+    return generated_image
+
+def sd_filter(enable):
+    if enable:
+        sd.safety_checker = safety_checker_sd
+        sd.requires_safety_checker = True
+    else:
+        sd.safety_checker = None
+        sd.requires_safety_checker = False
+
+potential_nsfw_checkbox = gr.Checkbox(
+                        label="Block potential NSFW image (Upon detection of this content, a black image will be returned)",
+                        # nopep8
+                        value=True,
+                        interactive=True,
+                    )
+                    avatar_button.click(
+                        generate_character_avatar,
+                        inputs=[
+                            name,
+                            summary,
+                            topic,
+                            negative_prompt,
+                            avatar_prompt,
+                            potential_nsfw_checkbox,
+                        ],
+                        outputs=image_input,
+                    )
+
+safety_checker_sd = sd.safety_checker

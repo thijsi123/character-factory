@@ -625,8 +625,8 @@ cat-eared headbands, or a pair of mismatched socks, contribute to her quirky and
             example_dialogue
             + "\n<|user|> create a prompt that lists the appearance "
             + "characteristics of a character whose summary is "
-            + "if lack of info, generate something based on available info."
             + f"{character_summary}. Topic: {topic} </s>\n<|assistant|> "
+            + "if lack of info, generate something based on available info."
         )
     )
     print(sd_prompt)
