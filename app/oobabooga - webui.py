@@ -735,7 +735,6 @@ cat-eared headbands, or a pair of mismatched socks, contribute to her quirky and
     )
     print(sd_prompt)
     sd_filter(nsfw_filter)
-    process_uploaded_image
     return image_generate(character_name,
                           sd_prompt,
                           input_none(negative_prompt),
@@ -766,9 +765,18 @@ def image_generate(character_name, prompt, negative_prompt):
     character_name = character_name.replace(" ", "_")
     os.makedirs(f"characters/{character_name}", exist_ok=True)
 
-    card_path = f"characters/{character_name}/{character_name}.png"
+    image_path = f"characters/{character_name}/{character_name}.png"
 
-    generated_image.save(card_path)
+    # Save the generated image
+    generated_image.save(image_path)
+
+    # Load the image back into a NumPy array
+    reloaded_image = Image.open(image_path)
+    reloaded_image_np = np.array(reloaded_image)
+
+    # Call process_uploaded_image
+    process_uploaded_image(reloaded_image_np)
+
     print("Generated character avatar")
     return generated_image
 
