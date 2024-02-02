@@ -1149,9 +1149,11 @@ with gr.Blocks() as webui:
                 )
     gr.HTML("""<div style='text-align: center; font-size: 20px;'>
         <p>
-          <a style="text-decoration: none; color: inherit;" href="https://github.com/Hukasx0/character-factory">Character Factory</a> 
+          <a style="text-decoration: none; color: inherit;" href="https://github.com/thijsi123/character-factory">Character Factory</a> 
           by 
           <a style="text-decoration: none; color: inherit;" href="https://github.com/Hukasx0">Hubert "Hukasx0" Kasperek</a>
+          and forked by
+          <a style="text-decoration: none; color: inherit;" href="https://github.com/thijsi123">Thijs</a>
         </p>
       </div>""")  # nopep8
 
