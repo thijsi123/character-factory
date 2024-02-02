@@ -14,6 +14,7 @@ safety_checker_sd = None
 
 folder_path = "models"  # Base directory for models
 
+
 def load_model(model_name, use_safetensors=False, use_local=False):
     global sd
 
@@ -29,7 +30,8 @@ def load_model(model_name, use_safetensors=False, use_local=False):
         sd = StableDiffusionPipeline.from_single_file(model_path, torch_dtype=torch.float16)
     else:
         print(f"Loading {model_name} from Hugging Face with safetensors={use_safetensors}.")
-        sd = StableDiffusionPipeline.from_pretrained(model_name, use_safetensors=use_safetensors, torch_dtype=torch.float16)
+        sd = StableDiffusionPipeline.from_pretrained(model_name, use_safetensors=use_safetensors,
+                                                     torch_dtype=torch.float16)
 
     if torch.cuda.is_available():
         sd.to("cuda")
@@ -40,6 +42,7 @@ def load_model(model_name, use_safetensors=False, use_local=False):
 
 # For a local .safetensors model
 load_model("oof.safetensors", use_safetensors=True, use_local=True)
+
 
 def process_url(url):
     global global_url
@@ -735,7 +738,7 @@ cat-eared headbands, or a pair of mismatched socks, contribute to her quirky and
             input_none(avatar_prompt)
             or send_message(
         example_dialogue
-        + "\n<|user|> create a prompt that lists the appearance " #create a prompt that lists the appearance characteristics of a character whose summary is Gender: male, name=gabe. Topic: anime
+        + "\n<|user|> create a prompt that lists the appearance "  # create a prompt that lists the appearance characteristics of a character whose summary is Gender: male, name=gabe. Topic: anime
         + "characteristics of a character whose summary is "
         + f"Gender: {gender}"
         + f"{character_summary}. Topic: {topic}</s>\n<|assistant|> "
@@ -866,6 +869,7 @@ def export_as_json(
 # Global variable to store the path of the processed image
 processed_image_path = None
 
+
 def export_character_card(name, summary, personality, scenario, greeting_message, example_messages):
     global processed_image_path  # Access the global variable
 
@@ -899,6 +903,7 @@ def export_character_card(name, summary, personality, scenario, greeting_message
     card_path = f"{base_path}{character_name}.card.png"
     character.export_neutral_card_file(card_path)
     return Image.open(card_path)
+
 
 with gr.Blocks() as webui:
     gr.Markdown("# Character Factory WebUI")
@@ -1160,6 +1165,3 @@ with gr.Blocks() as webui:
 safety_checker_sd = sd.safety_checker
 
 webui.launch(debug=True)
-
-
-
