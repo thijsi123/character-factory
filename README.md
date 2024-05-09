@@ -1,277 +1,202 @@
-# Character factory
+## ESRGAN (Enhanced SRGAN) [:rocket: [BasicSR](https://github.com/xinntao/BasicSR)] [[Real-ESRGAN](https://github.com/xinntao/Real-ESRGAN)]
 
-<p>WebUI Supports <a href="https://github.com/oobabooga/text-generation-webui" style="color: blue; text-decoration: underline;" target="_blank">oobabooga/text-generation-webui</a></p>
+:sparkles: **New Updates.**
 
-WebUI using Mistral 7b instruct 0.1:
-<a target="_blank" href="https://colab.research.google.com/drive/108koWoCDGaLZhZ0eV-gFuWtsnnLFMeCB">
-  <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/>
-</a>
+We have extended ESRGAN to [Real-ESRGAN](https://github.com/xinntao/Real-ESRGAN), which is a **more practical algorithm for real-world image restoration**. For example, it can also remove annoying JPEG compression artifacts. <br> You are recommended to have a try :smiley:
 
-WebUI using Zephyr 7B beta:
-<a target="_blank" href="https://colab.research.google.com/drive/1JqkrtFXKalcmuMvST2VltoS1UVwoQINH">
-  <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/>
-</a>
+In the [Real-ESRGAN](https://github.com/xinntao/Real-ESRGAN) repo,
 
-This Python script is designed to help you generate characters for [SillyTavern](https://github.com/SillyTavern/SillyTavern), [TavernAI](https://github.com/TavernAI/TavernAI), [TextGenerationWebUI](https://github.com/oobabooga/text-generation-webui) and many more, using LLM (Large Language Model) and Stable Diffusion. The script utilizes various deep learning models to create detailed character cards, including names, summaries, personalities, greeting messages, and character avatars.
+- You can still use the original ESRGAN model or your re-trained ESRGAN model. [The model zoo in Real-ESRGAN](https://github.com/xinntao/Real-ESRGAN#european_castle-model-zoo).
+- We provide a more handy inference script, which supports 1) **tile** inference; 2) images with **alpha channel**; 3) **gray** images; 4) **16-bit** images.
+- We also provide a **Windows executable file** `RealESRGAN-ncnn-vulkan` for easier use without installing the environment. This executable file also includes the original ESRGAN model.
+- The full training codes are also released in the [Real-ESRGAN](https://github.com/xinntao/Real-ESRGAN) repo.
 
-<div>
-  <h2>Character made using oobabooga/text-generation-webui Mistral 7b instruct 0.2 using 8k tokens</h2>
-  <h3>This character has a mistake that I'm too lazy to adjust, everything should work as intended.</h3>
-  <img src="https://github.com/thijsi123/character-factory/blob/master/examples/Kaori/Kaori.card.png?raw=true" width="300" height="300" alt="Grumpy Purrsnatch character card">
-</div>
+Welcome to open issues or open discussions in the [Real-ESRGAN](https://github.com/xinntao/Real-ESRGAN) repo.
 
+- If you have any question, you can open an issue in the [Real-ESRGAN](https://github.com/xinntao/Real-ESRGAN) repo.
+- If you have any good ideas or demands, please open an issue/discussion in the [Real-ESRGAN](https://github.com/xinntao/Real-ESRGAN) repo to let me know.
+- If you have some images that Real-ESRGAN could not well restored, please also open an issue/discussion in the [Real-ESRGAN](https://github.com/xinntao/Real-ESRGAN) repo. I will record it (but I cannot guarantee to resolve it😛).
 
-<div>
-  <h2>Characters from the main repository (could be reproduced using zephyr and mistral scripts)</h2>
-  <img src="https://github.com/Hukasx0/character-factory/blob/main/examples/Grumpy_Purrsnatch/Grumpy_Purrsnatch.card.png?raw=true" width="300" height="300" alt="Grumpy Purrsnatch character card">
-  <img src="https://github.com/Hukasx0/character-factory/blob/main/examples/Lily_Harper/Lily_Harper.card.png?raw=true" width="300" height="300" alt="Lily Harper character card">
-  <img src="https://github.com/Hukasx0/character-factory/blob/main/examples/Arthondt_Lightbringer/Arthondt_Lightbringer.card.png?raw=true" width="300" height="300" alt="Arthondt Lightbringer character card">
-  <img src="https://github.com/Hukasx0/character-factory/blob/main/examples/Albert_Einstein/Albert_Einstein.card.png?raw=true" width="300" height="300" alt="Albert Einstein character card">
-</div>
-(these four images above are valid character cards (V1), you can download them and use them in any frontend that supports character cards)
+Here are some examples for Real-ESRGAN:
 
----
+<p align="center">
+  <img src="https://raw.githubusercontent.com/xinntao/Real-ESRGAN/master/assets/teaser.jpg">
+</p>
+:book: Real-ESRGAN: Training Real-World Blind Super-Resolution with Pure Synthetic Data
 
-This script is designed to streamline the process of character generation for SillyTavern, TavernAI, and TextGenerationWebUI by leveraging LLM and Stable Diffusion models. It provides an easy way to create unique and imaginative characters for storytelling, chatting and other purposes.
+> [[Paper](https://arxiv.org/abs/2107.10833)] <br>
+> [Xintao Wang](https://xinntao.github.io/), Liangbin Xie, [Chao Dong](https://scholar.google.com.hk/citations?user=OSDCB0UAAAAJ), [Ying Shan](https://scholar.google.com/citations?user=4oXBp9UAAAAJ&hl=en) <br>
+> Applied Research Center (ARC), Tencent PCG<br>
+> Shenzhen Institutes of Advanced Technology, Chinese Academy of Sciences
 
-## WebUI
-<img src="https://raw.githubusercontent.com/Hukasx0/character-factory/main/images/webui.png"  alt="Character Factory WebUI Screenshot 1">
+-----
 
-<img src="https://raw.githubusercontent.com/Hukasx0/character-factory/main/images/webui2.png" alt="Character Factory WebUI Screenshot 2">
+As there may be some repos have dependency on this ESRGAN repo, we will not modify this ESRGAN repo (especially the codes).
 
-## Running WebUI locally
-### CPU
-1. download miniconda from https://docs.conda.io/projects/miniconda/en/latest/
-2. familiarize yourself with how conda works https://conda.io/projects/conda/en/latest/user-guide/getting-started.html
-3. Download Git (if you don't have it already) https://git-scm.com/
-4. Clone git repository
-```
-git clone https://github.com/Hukasx0/character-factory
-```
-5. Open the anaconda prompt and enter the path of the folder
+The following is the original README:
 
-for example:
-```
-cd C:\Users\me\Desktop\character-factory
-```
-6. Execute these commands in the conda command prompt step by step.
-```
-conda create -n character-factory
-```
-```
-conda activate character-factory
-```
-```
-conda install python=3.11
-```
-```
-pip install -r requirements-webui.txt
-```
-and you can start using the WebUI:
-```
-python ./app/main-mistral-webui.py
-```
-or
-```
-python ./app/main-zephyr-webui.py
-```
-Then go to the link http://localhost:7860/ in your browser
+#### The training codes are in :rocket: [BasicSR](https://github.com/xinntao/BasicSR). This repo only provides simple testing codes, pretrained models and the network interpolation demo.
 
-***Later, the next time you run it, you don't need to create a new environment, just repeat step 5. and type in (in the conda command prompt)***
-```
-conda activate character-factory
-```
+[BasicSR](https://github.com/xinntao/BasicSR) is an **open source** image and video super-resolution toolbox based on PyTorch (will extend to more restoration tasks in the future). <br>
+It includes methods such as **EDSR, RCAN, SRResNet, SRGAN, ESRGAN, EDVR**, etc. It now also supports **StyleGAN2**.
 
-### Cuda
-1. download miniconda from https://docs.conda.io/projects/miniconda/en/latest/
-2. familiarize yourself with how conda works https://conda.io/projects/conda/en/latest/user-guide/getting-started.html
-3. Download Git (if you don't have it already) https://git-scm.com/
-4. Clone git repository
-```
-git clone https://github.com/Hukasx0/character-factory
-```
-5. Open the anaconda prompt and enter the path of the folder
+### Enhanced Super-Resolution Generative Adversarial Networks
+By Xintao Wang, [Ke Yu](https://yuke93.github.io/), Shixiang Wu, [Jinjin Gu](http://www.jasongt.com/), Yihao Liu, [Chao Dong](https://scholar.google.com.hk/citations?user=OSDCB0UAAAAJ&hl=en), [Yu Qiao](http://mmlab.siat.ac.cn/yuqiao/), [Chen Change Loy](http://personal.ie.cuhk.edu.hk/~ccloy/)
 
-for example:
-```
-cd C:\Users\me\Desktop\character-factory
-```
-6. Download the Cuda package for Anaconda https://anaconda.org/nvidia/cuda
-8. Execute these commands in the conda command prompt step by step.
-```
-conda create -n character-factory
-```
-```
-conda activate character-factory
-```
-```
-conda install python=3.11
-```
-```
-pip install -r requirements-webui-cuda.txt
-```
+We won the first place in [PIRM2018-SR competition](https://www.pirm2018.org/PIRM-SR.html) (region 3) and got the best perceptual index.
+The paper is accepted to [ECCV2018 PIRM Workshop](https://pirm2018.org/).
 
-and you can start using the WebUI:
-```
-python ./app/main-mistral-webui.py
-```
-or
-```
-python ./app/main-zephyr-webui.py
-```
-Then go to the link http://localhost:7860/ in your browser
+:triangular_flag_on_post: Add [Frequently Asked Questions](https://github.com/xinntao/ESRGAN/blob/master/QA.md).
 
-***Later, the next time you run it, you don't need to create a new environment, just repeat step 5. and type in (in the conda command prompt)***
-```
-conda activate character-factory
-```
+> For instance,
+> 1. How to reproduce your results in the PIRM18-SR Challenge (with low perceptual index)?
+> 2. How do you get the perceptual index in your ESRGAN paper?
 
-## Running the script locally
-### CPU
-1. download miniconda from https://docs.conda.io/projects/miniconda/en/latest/
-2. familiarize yourself with how conda works https://conda.io/projects/conda/en/latest/user-guide/getting-started.html
-3. Download Git (if you don't have it already) https://git-scm.com/
-4. Clone git repository
-```
-git clone https://github.com/Hukasx0/character-factory
-```
-5. Open the anaconda prompt and enter the path of the folder
+#### BibTeX
 
-for example:
-```
-cd C:\Users\me\Desktop\character-factory
-```
-6. Execute these commands in the conda command prompt step by step.
-```
-conda create -n character-factory
-```
-```
-conda activate character-factory
-```
-```
-conda install python=3.11
-```
-```
-pip install -r requirements.txt
-```
+    @InProceedings{wang2018esrgan,
+        author = {Wang, Xintao and Yu, Ke and Wu, Shixiang and Gu, Jinjin and Liu, Yihao and Dong, Chao and Qiao, Yu and Loy, Chen Change},
+        title = {ESRGAN: Enhanced super-resolution generative adversarial networks},
+        booktitle = {The European Conference on Computer Vision Workshops (ECCVW)},
+        month = {September},
+        year = {2018}
+    }
 
-and you can start using the script, for example like this:
-```
-python ./app/main-mistral.py --name "Albert Einstein" --topic "science" --avatar-prompt "Albert Einstein"
-```
+<p align="center">
+  <img src="figures/baboon.jpg">
+</p>
 
-***Later, the next time you run it, you don't need to create a new environment, just repeat step 5. and type in (in the conda command prompt)***
-```
-conda activate character-factory
-```
+The **RRDB_PSNR** PSNR_oriented model trained with DF2K dataset (a merged dataset with [DIV2K](https://data.vision.ee.ethz.ch/cvl/DIV2K/) and [Flickr2K](http://cv.snu.ac.kr/research/EDSR/Flickr2K.tar) (proposed in [EDSR](https://github.com/LimBee/NTIRE2017))) is also able to achive high PSNR performance.
 
-### CUDA
-1. download miniconda from https://docs.conda.io/projects/miniconda/en/latest/
-2. familiarize yourself with how conda works https://conda.io/projects/conda/en/latest/user-guide/getting-started.html
-3. Download Git (if you don't have it already) https://git-scm.com/
-4. Clone git repository
-```
-git clone https://github.com/Hukasx0/character-factory
-```
-5. Open the anaconda prompt and enter the path of the folder
+| <sub>Method</sub> | <sub>Training dataset</sub> | <sub>Set5</sub> | <sub>Set14</sub> | <sub>BSD100</sub> | <sub>Urban100</sub> | <sub>Manga109</sub> |
+|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| <sub>[SRCNN](http://mmlab.ie.cuhk.edu.hk/projects/SRCNN.html)</sub>| <sub>291</sub>| <sub>30.48/0.8628</sub> |<sub>27.50/0.7513</sub>|<sub>26.90/0.7101</sub>|<sub>24.52/0.7221</sub>|<sub>27.58/0.8555</sub>|
+| <sub>[EDSR](https://github.com/thstkdgus35/EDSR-PyTorch)</sub> | <sub>DIV2K</sub> | <sub>32.46/0.8968</sub> | <sub>28.80/0.7876</sub> | <sub>27.71/0.7420</sub> | <sub>26.64/0.8033</sub> | <sub>31.02/0.9148</sub> |
+| <sub>[RCAN](https://github.com/yulunzhang/RCAN)</sub> |  <sub>DIV2K</sub> | <sub>32.63/0.9002</sub> | <sub>28.87/0.7889</sub> | <sub>27.77/0.7436</sub> | <sub>26.82/ 0.8087</sub>| <sub>31.22/ 0.9173</sub>|
+|<sub>RRDB(ours)</sub>| <sub>DF2K</sub>| <sub>**32.73/0.9011**</sub> |<sub>**28.99/0.7917**</sub> |<sub>**27.85/0.7455**</sub> |<sub>**27.03/0.8153**</sub> |<sub>**31.66/0.9196**</sub>|
 
-for example:
-```
-cd C:\Users\me\Desktop\character-factory
-```
-6. Download the Cuda package for Anaconda https://anaconda.org/nvidia/cuda
-8. Execute these commands in the conda command prompt step by step.
-```
-conda create -n character-factory
-```
-```
-conda activate character-factory
-```
-```
-conda install python=3.11
-```
-```
-pip install -r requirements-cuda.txt
-```
+## Quick Test
+#### Dependencies
+- Python 3
+- [PyTorch >= 1.0](https://pytorch.org/) (CUDA version >= 7.5 if installing with CUDA. [More details](https://pytorch.org/get-started/previous-versions/))
+- Python packages:  `pip install numpy opencv-python`
 
-and you can start using the script, for example like this:
+### Test models
+1. Clone this github repo.
 ```
-python ./app/main-mistral.py --name "Albert Einstein" --topic "science" --avatar-prompt "Albert Einstein"
+git clone https://github.com/xinntao/ESRGAN
+cd ESRGAN
 ```
-
-***Later, the next time you run it, you don't need to create a new environment, just repeat step 5. and type in (in the conda command prompt)***
+2. Place your own **low-resolution images** in `./LR` folder. (There are two sample images - baboon and comic).
+3. Download pretrained models from [Google Drive](https://drive.google.com/drive/u/0/folders/17VYV_SoZZesU6mbxz2dMAIccSSlqLecY) or [Baidu Drive](https://pan.baidu.com/s/1-Lh6ma-wXzfH8NqeBtPaFQ). Place the models in `./models`. We provide two models with high perceptual quality and high PSNR performance (see [model list](https://github.com/xinntao/ESRGAN/tree/master/models)).
+4. Run test. We provide ESRGAN model and RRDB_PSNR model and you can config in the `test.py`.
 ```
-conda activate character-factory
+python test.py
 ```
-  
-#### When you run the script for the first time, the script will automatically download the required LLM and Stable Diffusion models
+5. The results are in `./results` folder.
+### Network interpolation demo
+You can interpolate the RRDB_ESRGAN and RRDB_PSNR models with alpha in [0, 1].
 
-## Generation options
-```--name``` This flag allows you to specify the character's name. If provided, the script will use the name you specify. If not provided, the script will use the Language Model (LLM) to generate a name for the character.
+1. Run `python net_interp.py 0.8`, where *0.8* is the interpolation parameter and you can change it to any value in [0,1].
+2. Run `python test.py models/interp_08.pth`, where *models/interp_08.pth* is the model path.
 
-```--gender``` Use this parameter to specify the character's gender. If provided, the script will use the specified gender. Otherwise, LLM will choose the gender.
+<p align="center">
+  <img height="400" src="figures/43074.gif">
+</p>
 
-```--summary``` Use this flag to specify the character's summary. If you provide a summary, it will be used for the character. If not provided, the script will use LLM to generate a summary for the character.
+## Perceptual-driven SR Results
 
-```--personality``` This flag lets you specify the character's personality. If you provide a personality description, it will be used. If not provided, the script will use LLM to generate a personality description for the character.
+You can download all the resutls from [Google Drive](https://drive.google.com/drive/folders/1iaM-c6EgT1FNoJAOKmDrK7YhEhtlKcLx?usp=sharing). (:heavy_check_mark: included;  :heavy_minus_sign: not included; :o: TODO)
 
-```--greeting-message``` Use this flag to specify the character's greeting message for interacting with users. If provided, the script will use the specified greeting message. If not provided, LLM will generate a greeting message for the character.
+HR images can be downloaed from [BasicSR-Datasets](https://github.com/xinntao/BasicSR#datasets).
 
-```--avatar-prompt``` This flag allows you to specify the prompt for generating the character's avatar. If provided, the script will use the specified prompt for avatar generation. If not provided, the script will use LLM to generate the prompt for the avatar.
+| Datasets |LR | [*ESRGAN*](https://arxiv.org/abs/1809.00219) | [SRGAN](https://arxiv.org/abs/1609.04802) | [EnhanceNet](http://openaccess.thecvf.com/content_ICCV_2017/papers/Sajjadi_EnhanceNet_Single_Image_ICCV_2017_paper.pdf) | [CX](https://arxiv.org/abs/1803.04626) |
+|:---:|:---:|:---:|:---:|:---:|:---:|
+| Set5 |:heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark:| :o: |
+| Set14 | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark:| :o: |
+| BSDS100 | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark:| :o: |
+| [PIRM](https://pirm.github.io/) <br><sup>(val, test)</sup> | :heavy_check_mark: | :heavy_check_mark: | :heavy_minus_sign: | :heavy_check_mark:| :heavy_check_mark: |
+| [OST300](https://arxiv.org/pdf/1804.02815.pdf) |:heavy_check_mark: | :heavy_check_mark: | :heavy_minus_sign: | :heavy_check_mark:| :o: |
+| urban100 | :heavy_check_mark: | :heavy_check_mark: | :heavy_minus_sign: | :heavy_check_mark:| :o: |
+| [DIV2K](https://data.vision.ee.ethz.ch/cvl/DIV2K/) <br><sup>(val, test)</sup> | :heavy_check_mark: | :heavy_check_mark: | :heavy_minus_sign: | :heavy_check_mark:| :o: |
 
-```--topic``` Specify the topic for character generation using this flag. Topics can include "Fantasy", "Anime", "Noir style detective", "Old mage master of lightning", or any other topic relevant to your character. The topic can influence the character's details and characteristics.
+## ESRGAN
+We improve the [SRGAN](https://arxiv.org/abs/1609.04802) from three aspects:
+1. adopt a deeper model using Residual-in-Residual Dense Block (RRDB) without batch normalization layers.
+2. employ [Relativistic average GAN](https://ajolicoeur.wordpress.com/relativisticgan/) instead of the vanilla GAN.
+3. improve the perceptual loss by using the features before activation.
 
-```--negative-prompt``` This flag is used to provide a negative prompt for Stable Diffusion. A negative prompt can be used to guide the generation of character avatars by specifying elements that should not be included in the avatar.
+In contrast to SRGAN, which claimed that **deeper models are increasingly difficult to train**, our deeper ESRGAN model shows its superior performance with easy training.
 
-```--scenario``` Use this flag to specify the character's scenario. If you provide a scenario, it will be used for the character. If not provided, the script will use LLM to generate a scenario for the character.
+<p align="center">
+  <img height="120" src="figures/architecture.jpg">
+</p>
+<p align="center">
+  <img height="180" src="figures/RRDB.png">
+</p>
 
-```--example-messages``` Specify example messages for the character using this flag. If you provide example messages, they will be used for the character. If not provided, the script will use LLM to generate example messages for the character.
+## Network Interpolation
+We propose the **network interpolation strategy** to balance the visual quality and PSNR.
 
-## Colab usage
-1. Open the notebook in Google Colab by clicking one of those badges:
+<p align="center">
+  <img height="500" src="figures/net_interp.jpg">
+</p>
 
-version using Mistral 7b instruct 0.1:
-<a target="_blank" href="https://colab.research.google.com/drive/108koWoCDGaLZhZ0eV-gFuWtsnnLFMeCB">
-  <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/>
-</a>
+We show the smooth animation with the interpolation parameters changing from 0 to 1.
+Interestingly, it is observed that the network interpolation strategy provides a smooth control of the RRDB_PSNR model and the fine-tuned ESRGAN model.
 
-version using Zephyr 7B beta:
-<a target="_blank" href="https://colab.research.google.com/drive/1JqkrtFXKalcmuMvST2VltoS1UVwoQINH">
-  <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/>
-</a>
+<p align="center">
+  <img height="480" src="figures/81.gif">
+  &nbsp &nbsp
+  <img height="480" src="figures/102061.gif">
+</p>
 
-3. After opening the link, you will see the notebook within the Google Colab environment.
-4. Make sure to check whether a GPU is selected for your environment. Running your script on a CPU will not work. To verify the GPU selection, follow these steps:
-   1. Click on "Runtime" in the top menu.
-   2. Change the CPU to one of these: T4 GPU, A100 GPU, V100 GPU
-   3. Click "Save."
-5. After the environment starts, you need to run each cell in turn
-6. If everything is prepared, you can just run the last cell to generate characters
+## Qualitative Results
+PSNR (evaluated on the Y channel) and the perceptual index used in the PIRM-SR challenge are also provided for reference.
 
-## Example usage:
-```
-python ./app/main-mistral-webui.py
-```
-Then go to the link http://localhost:7860/ in your browser
-```
-python ./app/main-zephyr-webui.py
-```
-Then go to the link http://localhost:7860/ in your browser
+<p align="center">
+  <img src="figures/qualitative_cmp_01.jpg">
+</p>
+<p align="center">
+  <img src="figures/qualitative_cmp_02.jpg">
+</p>
+<p align="center">
+  <img src="figures/qualitative_cmp_03.jpg">
+</p>
+<p align="center">
+  <img src="figures/qualitative_cmp_04.jpg">
+</p>
 
-```
-python ./app/main-zephyr.py --topic "{{user}}'s pessimistic, monday-hating cat" --negative-prompt "human, gore, nsfw"
-```
-```
-python ./app/main-zephyr.py --topic "{{user}}'s childhood friend, who secretly loves him" --gender "female" --negative-prompt "gore, nude, nsfw"
-```
-```
-python ./app/main-mistral.py --topic "Old mage master of lightning" --gender "male" --negative-prompt "anime, nature, city, modern, young"
-```
-```
-python ./app/main-mistral.py --name "Albert Einstein" --topic "science" --avatar-prompt "Albert Einstein"
-```
+## Ablation Study
+Overall visual comparisons for showing the effects of each component in
+ESRGAN. Each column represents a model with its configurations in the top.
+The red sign indicates the main improvement compared with the previous model.
+<p align="center">
+  <img src="figures/abalation_study.png">
+</p>
 
-## License
-2023 Hubert Kasperek
+## BN artifacts
+We empirically observe that BN layers tend to bring artifacts. These artifacts,
+namely BN artifacts, occasionally appear among iterations and different settings,
+violating the needs for a stable performance over training. We find that
+the network depth, BN position, training dataset and training loss
+have impact on the occurrence of BN artifacts.
+<p align="center">
+  <img src="figures/BN_artifacts.jpg">
+</p>
 
-This script is available under the AGPL-3.0 license. Details of the license can be found in the [LICENSE](LICENSE) file.
+## Useful techniques to train a very deep network
+We find that residual scaling and smaller initialization can help to train a very deep network. More details are in the Supplementary File attached in our [paper](https://arxiv.org/abs/1809.00219).
+
+<p align="center">
+  <img height="250" src="figures/train_deeper_neta.png">
+  <img height="250" src="figures/train_deeper_netb.png">
+</p>
+
+## The influence of training patch size
+We observe that training a deeper network benefits from a larger patch size. Moreover, the deeper model achieves more improvement (∼0.12dB) than the shallower one (∼0.04dB) since larger model capacity is capable of taking full advantage of
+larger training patch size. (Evaluated on Set5 dataset with RGB channels.)
+<p align="center">
+  <img height="250" src="figures/patch_a.png">
+  <img height="250" src="figures/patch_b.png">
+</p>

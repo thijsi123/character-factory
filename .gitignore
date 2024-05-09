@@ -1,2 +1,12 @@
-models/
-app/models/
+# folder
+.vscode
+
+# file type
+*.svg
+*.pyc
+*.pth
+*.t7
+*.caffemodel
+*.mat
+*.npy
+
