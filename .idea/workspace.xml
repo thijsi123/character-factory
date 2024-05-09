@@ -5,44 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="cddb8e47-998b-41f9-bb95-e53d6af67c3d" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/LR/baboon.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/LR/comic.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/QA.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/RRDBNet_arch.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/koboldcpp - webui.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/figures/102061.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/figures/43074.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/figures/81.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/figures/BN_artifacts.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/figures/RRDB.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/figures/abalation_study.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/figures/architecture.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/figures/baboon.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/figures/net_interp.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/figures/patch_a.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/figures/patch_b.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/figures/qualitative_cmp_01.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/figures/qualitative_cmp_02.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/figures/qualitative_cmp_03.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/figures/qualitative_cmp_04.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/figures/train_deeper_neta.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/figures/train_deeper_netb.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/models/README.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/net_interp.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/results/baboon_ESRGAN.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/thijs_requirements.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transer_RRDB_models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LICENSE" beforeDir="false" afterPath="$PROJECT_DIR$/LICENSE" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/oobabooga - webui.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/oobabooga - webui.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/test 2.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/characters/Kaori/Kaori.card.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/characters/Kaori/Kaori.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/characters/uploaded_character/uploaded_character.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/koboldcpp - webui.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/koboldcpp - webui.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -74,22 +37,22 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Python.asad.executor&quot;: &quot;Run&quot;,
-    &quot;Python.infermatic - webui.executor&quot;: &quot;Run&quot;,
-    &quot;Python.koboldcpp - webui.executor&quot;: &quot;Run&quot;,
-    &quot;Python.search.executor&quot;: &quot;Run&quot;,
-    &quot;Python.test (2).executor&quot;: &quot;Run&quot;,
-    &quot;Python.test upscale.executor&quot;: &quot;Run&quot;,
-    &quot;Python.test.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;Merging master&quot;,
-    &quot;last_opened_file_path&quot;: &quot;G:/Documents/GitHub/character-factory/app&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;discordbeam&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Python.asad.executor": "Run",
+    "Python.infermatic - webui.executor": "Run",
+    "Python.koboldcpp - webui.executor": "Run",
+    "Python.search.executor": "Run",
+    "Python.test (2).executor": "Run",
+    "Python.test upscale.executor": "Run",
+    "Python.test.executor": "Run",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "master",
+    "last_opened_file_path": "G:/Documents/GitHub/character-factory/app",
+    "settings.editor.selected.configurable": "discordbeam"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="G:\Documents\GitHub\character-factory\app" />

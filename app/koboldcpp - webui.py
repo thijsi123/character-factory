@@ -974,7 +974,7 @@ def export_character_card(name, summary, personality, scenario, greeting_message
 
 with gr.Blocks() as webui:
     gr.Markdown("# Character Factory WebUI")
-    gr.Markdown("## OOBABOOGA MODE")
+    gr.Markdown("## KOBOLD MODE")
     with gr.Row():
         url_input = gr.Textbox(label="Enter URL", value="http://127.0.0.1:5001")
         submit_button = gr.Button("Set URL")
