@@ -4,7 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="cddb8e47-998b-41f9-bb95-e53d6af67c3d" name="Changes" comment="" />
+    <list default="true" id="cddb8e47-998b-41f9-bb95-e53d6af67c3d" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app 2/imagecaption.py" beforeDir="false" afterPath="$PROJECT_DIR$/app 2/imagecaption.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app 2/prompts/prompt_summary.py" beforeDir="false" afterPath="$PROJECT_DIR$/app 2/prompts/prompt_summary.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app 2/ui.py" beforeDir="false" afterPath="$PROJECT_DIR$/app 2/ui.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/koboldcpp - WebUi (Recommended).bat" beforeDir="false" afterPath="$PROJECT_DIR$/koboldcpp - WebUi (Recommended).bat" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />

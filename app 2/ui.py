@@ -38,12 +38,9 @@ def handle_greeting_message_button_click(
 def handle_example_messages_button_click(
         character_name, character_summary, character_personality, topic, use_alternate
 ):
-    if use_alternate:
-        return generate_example_messages2(character_name, character_summary, character_personality,
-                                          topic)
-    else:
-        return generate_example_messages(character_name, character_summary, character_personality,
-                                         topic)
+    return generate_example_messages(character_name, character_summary, character_personality,
+                                     topic)
+
 
 def generate_tags_and_set_prompt(image):
     # Assuming 'get_tags_for_image' returns a string of tags

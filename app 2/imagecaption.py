@@ -46,17 +46,17 @@ def predict(model, image_array):
 
 
 def get_sorted_general_strings(image_or_path, model_repo=MODEL_REPO, hf_token=HF_TOKEN):
+    # Debug statement
+    print(f"Received image_or_path: {image_or_path}")
+
     # Check if image_or_path is a path (str) or already a PIL Image
     if isinstance(image_or_path, str):
-        pil_image = Image.open(image_or_path)
+        try:
+            pil_image = Image.open(image_or_path)
+        except Exception as e:
+            print(f"Error opening image: {e}")
+            return None  # or handle it in a way that fits your application
     else:
         pil_image = image_or_path  # Assume it's already a PIL Image
 
-    model, tags_df, target_size = load_model(model_repo, hf_token)
-    image_array = prepare_image(pil_image, target_size)
-    preds = predict(model, image_array)
-    tags = list(zip(tags_df["name"], preds[0]))
-    sorted_tags = sorted(tags, key=lambda x: x[1], reverse=True)
-    sorted_general_strings = ", ".join([tag for tag, score in sorted_tags if score > 0.35])
-    return sorted_general_strings
 
