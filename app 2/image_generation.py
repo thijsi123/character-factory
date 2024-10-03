@@ -3,13 +3,15 @@ import os
 from PIL import Image
 import numpy as np
 
+
 def generate_character_avatar(
         character_name,
         character_summary,
         topic,
         negative_prompt,
         avatar_prompt,
-        nsfw_filter, gender
+        nsfw_filter,
+        gender
 ):
     example_dialogue = """
 <|system|>
@@ -29,37 +31,35 @@ Jamie's appearance is always polished and professional. He is often seen in tail
 Yamari's wardrobe is a colorful and eclectic mix, mirroring her ever-changing moods and the whimsy of her adventures. She often sports a schoolgirl uniform, a cute kimono, or an array of anime-inspired outfits, each tailored to suit the theme of her current escapade. Accessories, such as oversized bows, 
 cat-eared headbands, or a pair of mismatched socks, contribute to her quirky and endearing charm. Topic: anime </s>
 <|assistant|>: 1girl, anime, petite, delicate_frame, long_hair, black_hair, waist_length_hair, hair_ribbon, purple_ribbon, purple_eyes, oversized_bow, cat_ears, mismatched_socks </s>
-<|user|>: create a prompt that lists the appearance characteristics of a character whose summary is Name: suzie Summary: Topic: none Gender: none</s>
-<|assistant|>: 1girl, long hair, brown hair, brown eyes, </s>
-</s>
 """  # nopep8
-    print(gender)
+
     # Detect if "anime" is in the character summary or topic and adjust the prompt
     anime_specific_tag = "anime, 2d, " if 'anime' in character_summary.lower() or 'anime' in topic.lower() else "realistic, 3d, "
+
     raw_sd_prompt = (
             input_none(avatar_prompt)
             or send_message(
         example_dialogue
-        + "\n<|user|>: create a prompt that lists the appearance "  # create a prompt that lists the appearance characteristics of a character whose summary is Gender: male, name=gabe. Topic: anime
+        + "\n<|user|>: create a prompt that lists the appearance "
         + "characteristics of a character whose gender is "
         + f"Gender: {gender}, if female = 1girl, if male = 1boy. "
         + f" and whose summary is:"
         + f"{character_summary}. Topic: {topic}</s>\n<|assistant|>: "
-
     ).strip()
     )
+
     # Append the anime_specific_tag at the beginning of the raw_sd_prompt
     sd_prompt = anime_specific_tag + raw_sd_prompt.strip()
-    print(gender)
-    print(sd_prompt)
+
+    print(f"Gender: {gender}")
+    print(f"SD Prompt: {sd_prompt}")
+
     sd_filter(nsfw_filter)
-    return image_generate(character_name,
-                          sd_prompt,
-                          input_none(negative_prompt),
-                          )
+    return image_generate(character_name, sd_prompt, input_none(negative_prompt))
 
 
 def image_generate(character_name, prompt, negative_prompt):
+    global sd  # Make sure sd is defined globally
     prompt = "absurdres, full hd, 8k, high quality, " + prompt
     default_negative_prompt = (
             "worst quality, normal quality, low quality, low res, blurry, "
@@ -78,15 +78,17 @@ def image_generate(character_name, prompt, negative_prompt):
     )
     negative_prompt = default_negative_prompt + (negative_prompt or "")
 
-    generated_image = sd(prompt, negative_prompt=negative_prompt, height=768).images[0]
+    # Generate the image
+    generated_image = \
+    sd(prompt, negative_prompt=negative_prompt, height=768, num_inference_steps=50, guidance_scale=7.5).images[0]
 
+    # Prepare the filename and directory
     character_name = character_name.replace(" ", "_")
     os.makedirs(f"characters/{character_name}", exist_ok=True)
-
     image_path = f"characters/{character_name}/{character_name}.png"
 
     # Save the generated image
-    generated_image.save(image_path)
+    generated_image.save(image_path, format='PNG')
 
     # Load the image back into a NumPy array
     reloaded_image = Image.open(image_path)
@@ -95,7 +97,7 @@ def image_generate(character_name, prompt, negative_prompt):
     # Call process_uploaded_image
     process_uploaded_image(reloaded_image_np)
 
-    print("Generated character avatar" + prompt)
+    print(f"Generated character avatar: {prompt}")
     return generated_image
 
 def process_uploaded_image(uploaded_img):
@@ -119,6 +121,7 @@ def process_uploaded_image(uploaded_img):
     return pil_image
 
 def sd_filter(enable):
+    global sd, safety_checker_sd
     if enable:
         sd.safety_checker = safety_checker_sd
         sd.requires_safety_checker = True
@@ -126,4 +129,5 @@ def sd_filter(enable):
         sd.safety_checker = None
         sd.requires_safety_checker = False
 
+# Make sure to define safety_checker_sd somewhere in your code, for example:
 safety_checker_sd = sd.safety_checker

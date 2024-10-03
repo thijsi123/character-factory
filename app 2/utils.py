@@ -2,7 +2,7 @@ import os
 import requests
 from diffusers import StableDiffusionPipeline
 import torch
-
+import sys
 llm = None
 sd = None
 safety_checker_sd = None
@@ -32,8 +32,15 @@ def load_model(model_name, use_safetensors=False, use_local=False):
     if torch.cuda.is_available():
         sd.to("cuda")
         print(f"Loaded {model_name} to GPU in half precision (float16).")
+    elif torch.backends.mps.is_available():
+        sd.to("mps")
+        print(f"Loaded {model_name} to Metal (MPS) in half precision (float16).")
     else:
-        print(f"Loaded {model_name} to CPU.")
+        if sys.platform == "darwin":
+            sd.to("cpu", torch.float32)
+            print(f"Loaded {model_name} to CPU in full precision (float32) on macOS.")
+        else:
+            print(f"Loaded {model_name} to CPU.")
 
 def process_url(url):
     global global_url

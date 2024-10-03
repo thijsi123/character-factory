@@ -7,4 +7,5 @@ torchtext==0.6.0
 sdkit
 argparse
 ctransformers
+langchain-community
 langchain
