@@ -4,45 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="cddb8e47-998b-41f9-bb95-e53d6af67c3d" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/app 2/character_generation.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app 2/characters/Aiko/Aiko.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app 2/characters/Akira/Akira.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app 2/characters/Yumi/Yumi.card.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app 2/characters/Yumi/Yumi.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app 2/characters/uploaded_character/uploaded_character.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app 2/default_character_image.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app 2/image.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app 2/image_generation.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app 2/imagecaption.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app 2/import_export.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app 2/koboldcpp - webui.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app 2/main.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app 2/models" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app 2/prompts/prompt_example.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app 2/prompts/prompt_greeting.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app 2/prompts/prompt_name.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app 2/prompts/prompt_personality.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app 2/prompts/prompt_scenario.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app 2/prompts/prompt_summary.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app 2/ui.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app 2/utils.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/tabbyapi - webui.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/tabbyapi2 - webui.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/web.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/characters/Ris/Ris.card.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/characters/Ris/Ris.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/characters/a/a.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/characters/uploaded_character/uploaded_character.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/models/lyriel_v16.safetensors" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/models/oof.safetensors" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/run.bat" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tabbyapi - WebUi (Recommended).bat" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web.bat" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/koboldcpp - webui.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/koboldcpp - webui.py" afterDir="false" />
-    </list>
+    <list default="true" id="cddb8e47-998b-41f9-bb95-e53d6af67c3d" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
