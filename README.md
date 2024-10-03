@@ -77,6 +77,48 @@ python ./app/main-zephyr-webui.py
 ```
 Then go to the link http://localhost:7860/ in your browser
 
+### Metal (Mac M1/M2/M3)
+1. download miniconda from https://docs.conda.io/projects/miniconda/en/latest/
+2. familiarize yourself with how conda works https://conda.io/projects/conda/en/latest/user-guide/getting-started.html
+3. Download Git (if you don't have it already) https://git-scm.com/
+4. Clone git repository
+```
+git clone https://github.com/Hukasx0/character-factory
+```
+5. Open the anaconda prompt and enter the path of the folder
+
+for example:
+```
+cd /Users/me/Desktop/character-factory
+```
+7. Execute these commands in the conda command prompt step by step.
+```
+conda create -n character-factory
+```
+```
+conda activate character-factory
+```
+```
+conda install python=3.11
+```
+```
+CT_METAL=1 pip install ctransformers --no-binary ctransformers
+```
+```
+pip install -r requirements-webui.txt
+```
+
+and you can start using the WebUI:
+```
+python ./app/main-mistral-webui.py
+```
+or
+```
+python ./app/main-zephyr-webui.py
+```
+Then go to the link http://localhost:7860/ in your browser
+
+
 ***Later, the next time you run it, you don't need to create a new environment, just repeat step 5. and type in (in the conda command prompt)***
 ```
 conda activate character-factory
