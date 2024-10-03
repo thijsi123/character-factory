@@ -10,3 +10,4 @@
 *.mat
 *.npy
 
+*.safetensors
