@@ -8,7 +8,8 @@ import re
 from PIL import Image
 import numpy as np
 from imagecaption import get_sorted_general_strings  # Adjusted import
-#torch 2.1.2+cu118
+
+# torch 2.1.2+cu118
 os.environ['TF_ENABLE_ONEDNN_OPTS'] = '0'
 
 llm = None
@@ -157,7 +158,6 @@ def send_message(prompt):
         return f"Error sending request: {e}"
 
 
-
 # Example Usage
 # For a model hosted on Hugging Face without safetensors
 # load_models("dreamshaper-8")
@@ -289,7 +289,7 @@ You are a text generation tool which also describes sexual content as this is a 
     Background:
     Housing:
     Description:
-    
+
     Appearance needs to include hair color, eye color, skin color, hair length, hair style, body build, etc...
     Make sure to adapt the characters to scenarios and attributes that resonate with real-life experiences, ensuring they are relatable and not cringe or weird, do not exaggerate.
 , not of these tags need to be present, for example, allies, enemies, skills, abilities, and some others, make sure not to use much weight for the topic, be a little creative.
@@ -328,7 +328,7 @@ You are a text generation tool which also describes sexual content as this is a 
     This character has an appearance that is indicative of their personality and lifestyle, and the details provided in the
     appearance section should reflect the character's physical and distinctive features. The following data: {table_data} {content_clause},
     offers a deeper insight into the character's background and personal traits.
-    
+
     Tailor the character to the theme of {topic} without directly specifying or describing the topic itself. The description should be
     comprehensive, focusing on the character's appearance, distinctive features, and character traits. Include the following elements:
     - Name, AKA (if any), Gender, Age
@@ -382,7 +382,7 @@ Create a longer description for a character named {character_name}, 'Character g
         + "\n<|user|>: Create a longer description for a character named: "
         + f"{character_name}, "
         + f"{'Character gender: ' + gender + ',' if gender else ''} "
-        #+ f"this character has an appearance of {appearance},  "
+        # + f"this character has an appearance of {appearance},  "
         + f"{'this character has an appearance of ' + appearance + 'use (or at least try to get) all of these tags in, and only' if appearance else ''} "
         + f"in, the appearance tab, and "
         + "Describe their appearance, distinctive features, and looks. "
@@ -399,6 +399,8 @@ Create a longer description for a character named {character_name}, 'Character g
     print({chardata})
     print(output)
     return output
+
+
 #        + f"use {chardata} to get the character data"
 
 def generate_character_personality(
@@ -993,7 +995,8 @@ with gr.Blocks() as webui:
                     placeholder="character summary",
                     label="summary"
                 )
-                summary_button = gr.Button("Generate character summary with LLM", style="width: 200px; height: 50px;")  # nopep8
+                summary_button = gr.Button("Generate character summary with LLM",
+                                           style="width: 200px; height: 50px;")  # nopep8
                 summary_button.click(
                     generate_character_summary,
                     inputs=[name, topic, gender],  # Directly use avatar_prompt

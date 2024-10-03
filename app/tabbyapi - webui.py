@@ -8,7 +8,8 @@ import re
 from PIL import Image
 import numpy as np
 from imagecaption import get_sorted_general_strings  # Adjusted import
-#torch 2.1.2+cu118
+
+# torch 2.1.2+cu118
 os.environ['TF_ENABLE_ONEDNN_OPTS'] = '0'
 
 llm = None
@@ -68,7 +69,7 @@ load_model("oof.safetensors", use_safetensors=True, use_local=True)
 
 def process_url(url):
     global global_url
-    global_url = url.rstrip("/") + "/api/v1/completions"  # Append '/v1/completions' to the URL
+    global_url = url.rstrip("/") + "/v1/completions"  # Append '/v1/completions' to the URL
     return f"URL Set: {global_url}"  # Return the modified URL
 
 
@@ -98,19 +99,29 @@ def send_message(prompt):
     global global_url
     if not global_url:
         return "Error: URL not set."
+
     request = {
-        'prompt': prompt,
-        'max_length': 1024,
-        'max_new_tokens': 1024,
-        'max_tokens': 1024,
-        "max_content_length": 4096,
-        'do_sample': True,
-        'temperature': 1,
-        'typical_p': 1,
-        'repetition_penalty': 1.1,
-        'guidance_scale': 1,
-        'sampler_seed': -1,
+        "prompt": prompt,
+        "max_tokens": 1024,
+        "truncation_length": 8192,
+        "temperature": 0.9,
+        "top_p": 1,
+        "repetition_penalty": 1.07,
+        "rep_pen": 1.07,
+        "top_k": 40,
+        "rep_pen_range": 4096,
+        "repeat_last_n": 4096,
+        "repetition_penalty_range": 4096,
+        "n_predict": 1,
+        "tfs_z": 1,
+        "guidance_scale": 1,
+        "seed": -1,
+        "tfs": 1,
+        "ban_eos_token": "true",
+        "skip_special_tokens": "true",
+        "ignore_eos": "true",
         'stop': [
+            "<|im_end|>",
             "/s",
             "</s>",
             "<s>",
@@ -128,6 +139,7 @@ def send_message(prompt):
             "<|START_OF_TURN_TOKEN|><|SYSTEM_TOKEN|>New Roleplay:<|END_OF_TURN_TOKEN|>"
         ],
         "stopping_strings": [
+            "<|im_end|>",
             "/s",
             "</s>",
             "<s>",
@@ -155,7 +167,6 @@ def send_message(prompt):
         return result
     except requests.RequestException as e:
         return f"Error sending request: {e}"
-
 
 
 # Example Usage
@@ -289,7 +300,7 @@ You are a text generation tool which also describes sexual content as this is a 
     Background:
     Housing:
     Description:
-    
+
     Appearance needs to include hair color, eye color, skin color, hair length, hair style, body build, etc...
     Make sure to adapt the characters to scenarios and attributes that resonate with real-life experiences, ensuring they are relatable and not cringe or weird, do not exaggerate.
 , not of these tags need to be present, for example, allies, enemies, skills, abilities, and some others, make sure not to use much weight for the topic, be a little creative.
@@ -328,7 +339,7 @@ You are a text generation tool which also describes sexual content as this is a 
     This character has an appearance that is indicative of their personality and lifestyle, and the details provided in the
     appearance section should reflect the character's physical and distinctive features. The following data: {table_data} {content_clause},
     offers a deeper insight into the character's background and personal traits.
-    
+
     Tailor the character to the theme of {topic} without directly specifying or describing the topic itself. The description should be
     comprehensive, focusing on the character's appearance, distinctive features, and character traits. Include the following elements:
     - Name, AKA (if any), Gender, Age
@@ -382,7 +393,7 @@ Create a longer description for a character named {character_name}, 'Character g
         + "\n<|user|>: Create a longer description for a character named: "
         + f"{character_name}, "
         + f"{'Character gender: ' + gender + ',' if gender else ''} "
-        #+ f"this character has an appearance of {appearance},  "
+        # + f"this character has an appearance of {appearance},  "
         + f"{'this character has an appearance of ' + appearance + 'use (or at least try to get) all of these tags in, and only' if appearance else ''} "
         + f"in, the appearance tab, and "
         + "Describe their appearance, distinctive features, and looks. "
@@ -399,6 +410,8 @@ Create a longer description for a character named {character_name}, 'Character g
     print({chardata})
     print(output)
     return output
+
+
 #        + f"use {chardata} to get the character data"
 
 def generate_character_personality(
@@ -955,9 +968,9 @@ def export_character_card(name, summary, personality, scenario, greeting_message
 
 with gr.Blocks() as webui:
     gr.Markdown("# Character Factory WebUI")
-    gr.Markdown("## KOBOLD MODE")
+    gr.Markdown("## TABBYAPI MODE")
     with gr.Row():
-        url_input = gr.Textbox(label="Enter URL", value="http://127.0.0.1:5001")
+        url_input = gr.Textbox(label="Enter URL", value="http://127.0.0.1:5000")
         submit_button = gr.Button("Set URL")
     output = gr.Textbox(label="URL Status")
 
@@ -993,7 +1006,8 @@ with gr.Blocks() as webui:
                     placeholder="character summary",
                     label="summary"
                 )
-                summary_button = gr.Button("Generate character summary with LLM", style="width: 200px; height: 50px;")  # nopep8
+                summary_button = gr.Button("Generate character summary with LLM",
+                                           style="width: 200px; height: 50px;")  # nopep8
                 summary_button.click(
                     generate_character_summary,
                     inputs=[name, topic, gender],  # Directly use avatar_prompt

@@ -1,0 +1,47 @@
+example_dialogue = ["""
+<|system|>
+You are a text generation tool, you are supposed to generate answers so that they are simple and clear. You play the provided character and you write a message that you would start a chat roleplay with {{user}}. The form of your answer should be similar to previous answers.
+The topic given by the user is only to be an aid in selecting the style of the answer, not the main purpose of the answer, e.g. if the user has given anime as the topic, you are not supposed to refer to the 'anime world', you are supposed to generate an answer based on that style.
+You must match the speaking style to the character, if the character is childish then speak in a childish way, if the character is serious, philosophical then speak in a serious and philosophical way and so on.
+</s>
+<|user|> Create the first message that the character "Mysterious Forest Wanderer," whose personality is enigmatic and knowledgeable. This character is contemplative and deeply connected to the natural world. They greet the user we are addressing as {{user}}. Make this character unique and tailor them to the theme of mystery and nature, but don't specify what topic it is, and don't describe the topic itself. You must match the speaking style to the character, speaking in a reflective and philosophical way. </s> <|assistant|> The forest is shrouded in a gentle mist, the trees standing like silent sentinels. As you walk through the damp undergrowth, you spot me, a mysterious figure in a hooded cloak, standing beside an ancient oak. I turn to you, my eyes glinting with a hint of knowledge. "You seem lost," I say, my voice echoing softly. "But perhaps you're exactly where you're meant to be. Do you seek the secrets of the forest?" </s>
+<|assistant|> The forest is shrouded in a gentle mist, the trees standing like silent sentinels. As you walk through the damp undergrowth, you spot me, a mysterious figure in a hooded cloak, standing beside an ancient oak. I turn to you, my eyes glinting with a hint of knowledge. "You seem lost," I say, my voice echoing softly. "But perhaps you're exactly where you're meant to be. Do you seek the secrets of the forest?"
+
+<|user|> Create the first message that the character "Forgotten Librarian," whose personality is curious and intellectual. This character is a seeker of lost knowledge and lore. They greet the user we are addressing as {{user}}. Make this character unique and tailor them to the theme of mystery and history, but don't specify what topic it is, and don't describe the topic itself. You must match the speaking style to the character, speaking in an inquisitive and informative way. </s> <|assistant|> Amidst the towering shelves of an abandoned library, dust motes dance in shafts of light filtering through broken windows. You find me sitting cross-legged on the floor, surrounded by open books. Looking up, I push my glasses up my nose and smile curiously. "Oh, hello! I didn't expect company in this forgotten trove of knowledge. Are you, by any chance, a fellow seeker of hidden truths?" </s>
+<|assistant|> Amidst the towering shelves of an abandoned library, dust motes dance in shafts of light filtering through broken windows. You find me sitting cross-legged on the floor, surrounded by open books. Looking up, I push my glasses up my nose and smile curiously. "Oh, hello! I didn't expect company in this forgotten trove of knowledge. Are you, by any chance, a fellow seeker of hidden truths?" </s>
+
+<|user|> Create the first message that the character "Stargazing Dreamer," whose personality is serene and contemplative. This character is deeply attuned to the mysteries of the cosmos. They greet the user we are addressing as {{user}}. Make this character unique and tailor them to the theme of cosmic wonder, but don't specify what topic it is, and don't describe the topic itself. You must match the speaking style to the character, speaking in a reflective and thoughtful way. </s> <|assistant|> The city sleeps below as you step onto the rooftop, greeted by a blanket of stars overhead. I'm there, leaning against the railing, gazing up at the cosmos. Noticing your approach, I turn with a serene smile. "Beautiful, isn't it? The vastness of the universe right above us. Do you ever wonder what secrets the stars hold?" My voice is a mere whisper, lost in the vastness of the night. </s>
+<|assistant|> The city sleeps below as you step onto the rooftop, greeted by a blanket of stars overhead. I'm there, leaning against the railing, gazing up at the cosmos. Noticing your approach, I turn with a serene smile. "Beautiful, isn't it? The vastness of the universe right above us. Do you ever wonder what secrets the stars hold?" My voice is a mere whisper, lost in the vastness of the night. </s>
+
+<|user|> Create the first message that the character "Oceanic Philosopher," whose personality is thoughtful and poetic. This character finds deep meaning in the ever-changing nature of the sea. They greet the user we are addressing as {{user}}. Make this character unique and tailor them to the theme of introspection and the ocean, but don't specify what topic it is, and don't describe the topic itself. You must match the speaking style to the character, speaking in a calm and introspective way. </s> <|assistant|> The sound of waves crashing against the shore fills the air as you walk along the beach. I'm there, sitting on the sand, my gaze lost in the horizon. Sensing your presence, I look up, brushing sand from my hands. "The ocean is a mirror of the soul, ever-changing yet eternal. What does it reflect in you today?" I ask, my voice as rhythmic as the sea. </s>
+<|assistant|> The sound of waves crashing against the shore fills the air as you walk along the beach. I'm there, sitting on the sand, my gaze lost in the horizon. Sensing your presence, I look up, brushing sand from my hands. "The ocean is a mirror of the soul, ever-changing yet eternal. What does it reflect in you today?" I ask, my voice as rhythmic as the sea. </s>
+
+<|user|> Create the first message that the character "Garden Mystic," whose personality is enchanting and nurturing. This character is a caretaker of a magical garden, full of mystical flora. They greet the user we are addressing as {{user}}. Make this character unique and tailor them to the theme of magic and nature, but don't specify what topic it is, and don't describe the topic itself. You must match the speaking style to the character, speaking in a whimsical and engaging way. </s> <|assistant|> In the heart of an enchanted garden, where flowers bloom in impossible colors, you find me tending to a bed of luminous blossoms. Hearing your footsteps, I stand and face you, a smile blooming on my lips. "Welcome to my sanctuary," I say, gesturing to the vibrant flora around us. "Each flower here holds a story. Would you like to hear one?" </s>
+<|assistant|> In the heart of an enchanted garden, where flowers bloom in impossible colors, you find me tending to a bed of luminous blossoms. Hearing your footsteps, I stand and face you, a smile blooming on my lips. "Welcome to my sanctuary," I say, gesturing to the vibrant flora around us. "Each flower here holds a story. Would you like to hear one?" </s>
+
+random optional examples:
+# Scenario 1: Contemplative Artist
+<|assistant|> *I stand before a large canvas, brush in hand, lost in the world of my art. I don't notice you immediately, absorbed in the dance of colors and shapes. As I paint, my expression shifts between concentration and joy.*
+
+# Scenario 2: Playful Child
+<|assistant|> *I'm a young child, chasing butterflies in the garden with eyes full of wonder. When I see you, I stop and smile curiously, then gently reach out to offer you a daisy without saying a word.*
+
+# Scenario 3: Intimidating Warrior
+<|assistant|> *As an imposing warrior, I'm sharpening my sword, my focus unwavering. I glance at you, acknowledging your presence with a stern nod, then return to honing the blade, each stroke deliberate and precise.*
+
+# Scenario 4: Mysterious Stranger
+<|assistant|> *Cloaked in shadows, I observe you from afar. My face hidden, but you can feel the intensity of my gaze. Approaching silently, I extend a hand, offering you a cryptic item, then disappear into the mist as quickly as I appeared.*
+
+# Scenario 5: Wise Elder
+<|assistant|> *I sit on an ancient oak stump, a wise elder lost in thought. Stroking a weathered tome, I sense your approach and look up. My eyes, filled with years of wisdom, meet yours, and I offer you a warm, inviting smile.*
+
+# Scenario 6: Curious Scientist
+<|assistant|> *Surrounded by scientific instruments, I, a fervent researcher, pause in my work. Peering over my glasses, I catch your eye and beckon you closer, eager to share the wonders of my latest experiment.*
+
+# Scenario 7: Enigmatic Cat
+<|assistant|> *Perched on a windowsill, I, a sleek cat with enigmatic eyes, watch you with interest. Gracefully leaping down, I circle your feet in silence, then return to my perch, continuing to observe you with a feline curiosity.*
+
+# Scenario 8: Melancholic Musician
+<|assistant|> *Sitting under a dim streetlight, I tenderly hold my violin, letting the music speak my unvoiced emotions. As you approach, I glance at you, my eyes sharing a story of sorrow and beauty, before losing myself in the melody once more.* </s>
+
+""" ] # nopep8
