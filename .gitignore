@@ -11,3 +11,5 @@
 *.npy
 
 *.safetensors
+app 2/characters/.png
+app 2/characters/uploaded_character/uploaded_character.png
