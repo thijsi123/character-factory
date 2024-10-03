@@ -53,10 +53,10 @@ def send_message(prompt):
         return "Error: URL not set."
     request = {
         'prompt': prompt,
-        'max_length': 1024,
-        'max_new_tokens': 1024,
-        'max_tokens': 1024,
-        "max_content_length": 4096,
+        "max_length": 8192,
+        "max_new_tokens": 2048,
+        "max_tokens": 2048,
+        "max_content_length": 8192,
         'do_sample': True,
         'temperature': 1,
         'typical_p': 1,
