@@ -87,10 +87,11 @@ def create_webui():
                         placeholder="character summary",
                         label="summary"
                     )
+                    nsfw_checkbox = gr.Checkbox(label="Enable NSFW content", value=False)
                     summary_button = gr.Button("Generate character summary with LLM")
                     summary_button.click(
                         generate_character_summary,
-                        inputs=[name, topic, gender],
+                        inputs=[name, topic, gender, nsfw_checkbox],
                         outputs=summary,
                     )
                 with gr.Row():
