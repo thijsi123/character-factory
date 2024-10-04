@@ -3,6 +3,7 @@ import requests
 from diffusers import StableDiffusionPipeline
 import torch
 import sys
+
 llm = None
 sd = None
 safety_checker_sd = None
@@ -11,6 +12,7 @@ processed_image_path = None
 global_url = None
 
 folder_path = "models"  # Base directory for models
+
 
 def load_model(model_name, use_safetensors=False, use_local=False):
     global sd
@@ -42,10 +44,12 @@ def load_model(model_name, use_safetensors=False, use_local=False):
         else:
             print(f"Loaded {model_name} to CPU.")
 
+
 def process_url(url):
     global global_url
     global_url = url.rstrip("/") + "/api/v1/completions"  # Append '/v1/completions' to the URL
     return f"URL Set: {global_url}"  # Return the modified URL
+
 
 def send_message(prompt):
     global global_url
@@ -109,12 +113,14 @@ def send_message(prompt):
     except requests.RequestException as e:
         return f"Error sending request: {e}"
 
+
 def input_none(text):
     user_input = text
     if user_input == "":
         return None
     else:
         return user_input
+
 
 def combined_avatar_prompt_action(prompt):
     # First, update the avatar prompt
@@ -127,6 +133,7 @@ def combined_avatar_prompt_action(prompt):
 
     # Return both messages or just one, depending on how you want to display the outcome
     return update_message, use_message
+
 
 # Load the model
 load_model("oof.safetensors", use_safetensors=True, use_local=True)
