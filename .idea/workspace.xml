@@ -5,11 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="cddb8e47-998b-41f9-bb95-e53d6af67c3d" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/app 2/prompts/prompt_nonnsfw_summary.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app 2/char_input.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app 2/vector.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app 2/wiki.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app 2/character_generation.py" beforeDir="false" afterPath="$PROJECT_DIR$/app 2/character_generation.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app 2/prompts/prompt_summary.py" beforeDir="false" afterPath="$PROJECT_DIR$/app 2/prompts/prompt_summary.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app 2/ui.py" beforeDir="false" afterPath="$PROJECT_DIR$/app 2/ui.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app 2/utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/app 2/utils.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -44,7 +45,9 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "Python.asad.executor": "Run",
+    "Python.char_input.executor": "Run",
     "Python.character_generation.executor": "Run",
+    "Python.fandom.executor": "Run",
     "Python.import_export.executor": "Run",
     "Python.infermatic - webui.executor": "Run",
     "Python.koboldcpp - webui.executor": "Run",
@@ -53,7 +56,9 @@
     "Python.test (2).executor": "Run",
     "Python.test upscale.executor": "Run",
     "Python.test.executor": "Run",
+    "Python.ui.executor": "Run",
     "Python.utils.executor": "Run",
+    "Python.vector.executor": "Run",
     "Python.web.executor": "Run",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
@@ -70,6 +75,9 @@
       <recent name="G:\Documents\GitHub\character-factory\app" />
       <recent name="G:\Documents\GitHub\character-factory\esgran" />
       <recent name="G:\Documents\GitHub\character-factory" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="G:\Documents\GitHub\character-factory\app 2" />
     </key>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />

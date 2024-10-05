@@ -3,7 +3,8 @@ from character_generation import *
 from image_generation import *
 from import_export import *
 from utils import *
-from imagecaption import get_sorted_general_strings  # Adjusted import
+from imagecaption import get_sorted_general_strings
+from wiki import generate_character_summary_from_fandom
 
 
 def find_image_path():
@@ -17,6 +18,7 @@ def find_image_path():
             return path
 
     return None  # Return None if no image is found
+
 
 image_path = find_image_path()
 
@@ -46,6 +48,7 @@ def generate_tags_and_set_prompt(image):
     # Assuming 'get_tags_for_image' returns a string of tags
     tags = get_sorted_general_strings(image)
     return tags
+
 
 def create_webui():
     with gr.Blocks() as webui:
@@ -199,6 +202,54 @@ def create_webui():
                             ],
                             outputs=image_input,
                         )
+
+        with gr.Tab("Wiki Character"):
+            with gr.Column():
+                wiki_url = gr.Textbox(label="Fandom Wiki URL", placeholder="Enter the URL of the character's wiki page")
+                wiki_character_name = gr.Textbox(label="Character Name", placeholder="Enter the character's name")
+                wiki_topic = gr.Textbox(label="Topic/Series",
+                                        placeholder="Enter the series or topic (e.g., 'The Legend of Zelda')")
+                wiki_gender = gr.Textbox(label="Gender (optional)", placeholder="Enter the character's gender if known")
+                wiki_appearance = gr.Textbox(label="Appearance (optional)",
+                                             placeholder="Enter any specific appearance details")
+                wiki_nsfw = gr.Checkbox(label="Include NSFW content", value=False)
+
+                wiki_generate_button = gr.Button("Generate Character Summary from Wiki")
+
+                wiki_summary_output = gr.Textbox(label="Generated Character Summary", lines=10)
+
+                wiki_generate_button.click(
+                    generate_character_summary_from_fandom,
+                    inputs=[wiki_url, wiki_character_name, wiki_topic, wiki_gender, wiki_appearance, wiki_nsfw],
+                    outputs=wiki_summary_output
+                )
+
+                wiki_update_button = gr.Button("Update Character with Wiki Summary")
+
+                wiki_update_button.click(
+                    lambda wiki_name, wiki_summary: (wiki_name, wiki_summary),
+                    inputs=[wiki_character_name, wiki_summary_output],
+                    outputs=[name, summary]
+                )
+
+                def handle_wiki_generate(fandom_url, character_name, topic, gender, appearance, nsfw):
+                    if not fandom_url:
+                        return gr.Textbox.update(value="Error: Please provide a valid Fandom Wiki URL.", visible=True)
+
+                    summary = generate_character_summary_from_fandom(fandom_url, character_name, topic, gender,
+                                                                     appearance, nsfw)
+
+                    if summary.startswith("Error:") or summary.startswith("An error occurred"):
+                        return gr.Textbox.update(value=summary, visible=True)
+                    else:
+                        return gr.Textbox.update(value=summary, visible=True)
+
+                wiki_generate_button.click(
+                    handle_wiki_generate,
+                    inputs=[wiki_url, wiki_character_name, wiki_topic, wiki_gender, wiki_appearance, wiki_nsfw],
+                    outputs=wiki_summary_output
+                )
+
         with gr.Tab("Import character"):
             with gr.Column():
                 with gr.Row():
@@ -281,6 +332,7 @@ def create_webui():
           </div>""")
 
     return webui
+
 
 # Add this at the end of the file to launch the interface
 webui = create_webui()
