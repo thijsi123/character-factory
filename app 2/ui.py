@@ -53,7 +53,8 @@ def generate_tags_and_set_prompt(image):
 
 
 def create_webui():
-    with gr.Blocks() as webui:
+    # Use the "dark" theme for a black/grey look
+    with gr.Blocks(theme="dark") as webui:
         gr.Markdown("# Character Factory WebUI")
         gr.Markdown("## KOBOLD MODE")
         with gr.Row():

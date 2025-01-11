@@ -112,7 +112,6 @@ def get_sorted_general_strings(image_or_path, model_repo=None, hf_token=HF_TOKEN
     if image_or_path is None:
         logger.error("Received None as image_or_path. Please provide a valid image or path.")
         return None
-
     try:
         model, tags_df, target_size = load_model(model_repo, hf_token)
     except ValueError:
