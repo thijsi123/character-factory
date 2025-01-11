@@ -108,6 +108,11 @@ def predict(model, image_array):
 def get_sorted_general_strings(image_or_path, model_repo=None, hf_token=HF_TOKEN, general_threshold=0.35):
     global model, tags_df, target_size
 
+    # Check if image_or_path is None
+    if image_or_path is None:
+        logger.error("Received None as image_or_path. Please provide a valid image or path.")
+        return None
+
     try:
         model, tags_df, target_size = load_model(model_repo, hf_token)
     except ValueError:
