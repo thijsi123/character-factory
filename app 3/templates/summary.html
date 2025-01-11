@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Summary</h2>
+<ul class="list-group mb-4">
+    {% if data.style %}
+    <li class="list-group-item"><strong>Style:</strong> {{ data.style }}</li>
+    {% endif %}
+    {% if data.ethnicity %}
+    <li class="list-group-item"><strong>Ethnicity:</strong> {{ data.ethnicity }}</li>
+    {% endif %}
+    {% if data.age %}
+    <li class="list-group-item"><strong>Age:</strong> {{ data.age }}+</li>
+    {% endif %}
+    {% if data.eye_color %}
+    <li class="list-group-item"><strong>Eye Color:</strong> {{ data.eye_color }}</li>
+    {% endif %}
+    {% if data.hair_style %}
+    <li class="list-group-item"><strong>Hair Style:</strong> {{ data.hair_style }}</li>
+    {% endif %}
+    {% if data.hair_color %}
+    <li class="list-group-item"><strong>Hair Color:</strong> {{ data.hair_color }}</li>
+    {% endif %}
+    {% if data.body_type %}
+    <li class="list-group-item"><strong>Body Type:</strong> {{ data.body_type }}</li>
+    {% endif %}
+    {% if data.breast_size %}
+    <li class="list-group-item"><strong>Breast Size:</strong> {{ data.breast_size }}</li>
+    {% endif %}
+    {% if data.butt_size %}
+    <li class="list-group-item"><strong>Butt Size:</strong> {{ data.butt_size }}</li>
+    {% endif %}
+    {% if data.voice %}
+    <li class="list-group-item"><strong>Voice:</strong> {{ data.voice }}</li>
+    {% endif %}
+    {% if data.occupation %}
+    <li class="list-group-item"><strong>Occupation:</strong> {{ data.occupation }}</li>
+    {% endif %}
+    {% if data.hobbies %}
+    <li class="list-group-item"><strong>Hobbies:</strong> {{ data.hobbies | join(', ') }}</li>
+    {% endif %}
+    {% if data.relationship %}
+    <li class="list-group-item"><strong>Relationship:</strong> {{ data.relationship }}</li>
+    {% endif %}
+    {% if data.clothing %}
+    <li class="list-group-item"><strong>Clothing:</strong> {{ data.clothing }}</li>
+    {% endif %}
+</ul>
+<form method="POST" action="{{ url_for('finalize') }}">
+    <button type="submit" class="btn btn-success btn-lg">Bring my AI to life</button>
+</form>
+{% endblock %}

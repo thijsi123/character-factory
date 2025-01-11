@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Step {{ step_num }}: Choose Ethnicity*</h2>
+<form method="POST">
+    <div class="mb-4">
+        <div class="btn-group" role="group" aria-label="Ethnicity">
+            <input type="radio" class="btn-check" name="ethnicity" id="caucasian" value="Caucasian" autocomplete="off" {% if data.ethnicity == 'Caucasian' %}checked{% endif %} required>
+            <label class="btn btn-outline-primary" for="caucasian">Caucasian</label>
+
+            <input type="radio" class="btn-check" name="ethnicity" id="latina" value="Latina" autocomplete="off" {% if data.ethnicity == 'Latina' %}checked{% endif %}>
+            <label class="btn btn-outline-primary" for="latina">Latina</label>
+
+            <input type="radio" class="btn-check" name="ethnicity" id="asian" value="Asian" autocomplete="off" {% if data.ethnicity == 'Asian' %}checked{% endif %}>
+            <label class="btn btn-outline-primary" for="asian">Asian</label>
+
+            <input type="radio" class="btn-check" name="ethnicity" id="arab" value="Arab" autocomplete="off" {% if data.ethnicity == 'Arab' %}checked{% endif %}>
+            <label class="btn btn-outline-primary" for="arab">Arab</label>
+
+            <input type="radio" class="btn-check" name="ethnicity" id="black_afro" value="Black/Afro" autocomplete="off" {% if data.ethnicity == 'Black/Afro' %}checked{% endif %}>
+            <label class="btn btn-outline-primary" for="black_afro">Black/Afro</label>
+        </div>
+    </div>
+    {% if error %}
+    <div class="alert alert-danger">{{ error }}</div>
+    {% endif %}
+    <div class="d-flex justify-content-between">
+        <button type="submit" name="previous" class="btn btn-secondary">Previous</button>
+        <button type="submit" name="next" class="btn btn-primary">Next</button>
+    </div>
+</form>
+{% endblock %}

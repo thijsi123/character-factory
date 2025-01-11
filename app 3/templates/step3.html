@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Step {{ step_num }}: Choose Age*</h2>
+<form method="POST">
+    <div class="mb-4">
+        <label for="age" class="form-label">Age: <span id="ageValue">{{ data.age if data.age else '18' }}</span>+</label>
+        <input type="range" class="form-range" id="age" name="age" min="18" max="55" step="1" value="{{ data.age if data.age else '18' }}" oninput="ageOutput.value = age.value">
+        <output name="ageOutput" id="ageOutput">{{ data.age if data.age else '18' }}</output>+
+    </div>
+    {% if error %}
+    <div class="alert alert-danger">{{ error }}</div>
+    {% endif %}
+    <div class="d-flex justify-content-between">
+        <button type="submit" name="previous" class="btn btn-secondary">Previous</button>
+        <button type="submit" name="next" class="btn btn-primary">Next</button>
+    </div>
+</form>
+
+<script>
+    const ageSlider = document.getElementById('age');
+    const ageOutput = document.getElementById('ageOutput');
+
+    ageSlider.oninput = function() {
+        ageOutput.value = this.value;
+    }
+</script>
+{% endblock %}

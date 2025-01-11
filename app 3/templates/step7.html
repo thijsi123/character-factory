@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Step {{ step_num }}: Choose Body Type*</h2>
+<form method="POST">
+    <div class="mb-4">
+        <div class="btn-group" role="group" aria-label="Body Type">
+            <input type="radio" class="btn-check" name="body_type" id="petite" value="Petite" autocomplete="off" {% if data.body_type == 'Petite' %}checked{% endif %} required>
+            <label class="btn btn-outline-primary" for="petite">Petite</label>
+
+            <input type="radio" class="btn-check" name="body_type" id="slim" value="Slim" autocomplete="off" {% if data.body_type == 'Slim' %}checked{% endif %}>
+            <label class="btn btn-outline-primary" for="slim">Slim</label>
+
+            <input type="radio" class="btn-check" name="body_type" id="athletic" value="Athletic" autocomplete="off" {% if data.body_type == 'Athletic' %}checked{% endif %}>
+            <label class="btn btn-outline-primary" for="athletic">Athletic</label>
+
+            <input type="radio" class="btn-check" name="body_type" id="voluptuous" value="Voluptuous" autocomplete="off" {% if data.body_type == 'Voluptuous' %}checked{% endif %}>
+            <label class="btn btn-outline-primary" for="voluptuous">Voluptuous</label>
+
+            <input type="radio" class="btn-check" name="body_type" id="curvy" value="Curvy" autocomplete="off" {% if data.body_type == 'Curvy' %}checked{% endif %}>
+            <label class="btn btn-outline-primary" for="curvy">Curvy</label>
+        </div>
+    </div>
+    {% if error %}
+    <div class="alert alert-danger">{{ error }}</div>
+    {% endif %}
+    <div class="d-flex justify-content-between">
+        <button type="submit" name="previous" class="btn btn-secondary">Previous</button>
+        <button type="submit" name="next" class="btn btn-primary">Next</button>
+    </div>
+</form>
+{% endblock %}

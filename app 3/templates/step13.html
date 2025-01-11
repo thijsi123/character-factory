@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Step {{ step_num }}: Choose Relationship*</h2>
+<form method="POST">
+    <div class="mb-4">
+        <div class="btn-group" role="group" aria-label="Relationship">
+            <input type="radio" class="btn-check" name="relationship" id="stranger" value="Stranger" autocomplete="off" {% if data.relationship == 'Stranger' %}checked{% endif %} required>
+            <label class="btn btn-outline-primary" for="stranger">Stranger</label>
+
+            <input type="radio" class="btn-check" name="relationship" id="school_mate" value="School Mate" autocomplete="off" {% if data.relationship == 'School Mate' %}checked{% endif %}>
+            <label class="btn btn-outline-primary" for="school_mate">School Mate</label>
+
+            <input type="radio" class="btn-check" name="relationship" id="colleague" value="Colleague" autocomplete="off" {% if data.relationship == 'Colleague' %}checked{% endif %}>
+            <label class="btn btn-outline-primary" for="colleague">Colleague</label>
+
+            <input type="radio" class="btn-check" name="relationship" id="mentor" value="Mentor" autocomplete="off" {% if data.relationship == 'Mentor' %}checked{% endif %}>
+            <label class="btn btn-outline-primary" for="mentor">Mentor</label>
+
+            <input type="radio" class="btn-check" name="relationship" id="girlfriend" value="Girlfriend" autocomplete="off" {% if data.relationship == 'Girlfriend' %}checked{% endif %}>
+            <label class="btn btn-outline-primary" for="girlfriend">Girlfriend</label>
+
+            <input type="radio" class="btn-check" name="relationship" id="sex_friend" value="Sex Friend" autocomplete="off" {% if data.relationship == 'Sex Friend' %}checked{% endif %}>
+            <label class="btn btn-outline-primary" for="sex_friend">Sex Friend</label>
+
+            <input type="radio" class="btn-check" name="relationship" id="wife" value="Wife" autocomplete="off" {% if data.relationship == 'Wife' %}checked{% endif %}>
+            <label class="btn btn-outline-primary" for="wife">Wife</label>
+
+            <input type="radio" class="btn-check" name="relationship" id="mistress" value="Mistress" autocomplete="off" {% if data.relationship == 'Mistress' %}checked{% endif %}>
+            <label class="btn btn-outline-primary" for="mistress">Mistress</label>
+
+            <input type="radio" class="btn-check" name="relationship" id="friend" value="Friend" autocomplete="off" {% if data.relationship == 'Friend' %}checked{% endif %}>
+            <label class="btn btn-outline-primary" for="friend">Friend</label>
+
+            <input type="radio" class="btn-check" name="relationship" id="best_friend" value="Best Friend" autocomplete="off" {% if data.relationship == 'Best Friend' %}checked{% endif %}>
+            <label class="btn btn-outline-primary" for="best_friend">Best Friend</label>
+
+            <input type="radio" class="btn-check" name="relationship" id="step_sister" value="Step Sister" autocomplete="off" {% if data.relationship == 'Step Sister' %}checked{% endif %}>
+            <label class="btn btn-outline-primary" for="step_sister">Step Sister</label>
+
+            <input type="radio" class="btn-check" name="relationship" id="step_mom" value="Step Mom" autocomplete="off" {% if data.relationship == 'Step Mom' %}checked{% endif %}>
+            <label class="btn btn-outline-primary" for="step_mom">Step Mom</label>
+        </div>
+    </div>
+    {% if error %}
+    <div class="alert alert-danger">{{ error }}</div>
+    {% endif %}
+    <div class="d-flex justify-content-between">
+        <button type="submit" name="previous" class="btn btn-secondary">Previous</button>
+        <button type="submit" name="next" class="btn btn-primary">Next</button>
+    </div>
+</form>
+{% endblock %}

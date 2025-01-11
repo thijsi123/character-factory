@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Step {{ step_num }}: Choose Hobbies* (Select up to 3)</h2>
+<form method="POST">
+    <div class="mb-4">
+        <!-- List of hobbies -->
+        {% set hobbies_list = [
+            'Fitness', 'Vlogging', 'Traveling', 'Hiking', 'Gaming', 'Parties',
+            'Series', 'Anime', 'Cosplay', 'Self-Development', 'Writing',
+            'DIY Crafting', 'Veganism', 'Photography', 'Volunteering',
+            'Cars', 'Art', 'Watching Netflix', 'Manga And Anime', 'Martial Arts'
+        ] %}
+        {% for hobby in hobbies_list %}
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="hobbies" id="{{ hobby|replace(' ', '_') }}" value="{{ hobby }}" {% if hobby in data.get('hobbies', []) %}checked{% endif %}>
+                <label class="form-check-label" for="{{ hobby|replace(' ', '_') }}">{{ hobby }}</label>
+            </div>
+        {% endfor %}
+    </div>
+    {% if error %}
+    <div class="alert alert-danger">{{ error }}</div>
+    {% endif %}
+    <script>
+        const checkboxes = document.querySelectorAll('input[type="checkbox"][name="hobbies"]');
+        const max = 3;
+
+        checkboxes.forEach((checkbox) => {
+            checkbox.addEventListener('change', () => {
+                const checkedCount = document.querySelectorAll('input[type="checkbox"][name="hobbies"]:checked').length;
+                if (checkedCount > max) {
+                    checkbox.checked = false;
+                    alert(`You can select up to ${max} hobbies.`);
+                }
+            });
+        });
+    </script>
+    <div class="d-flex justify-content-between">
+        <button type="submit" name="previous" class="btn btn-secondary">Previous</button>
+        <button type="submit" name="next" class="btn btn-primary">Next</button>
+    </div>
+</form>
+{% endblock %}

@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Step {{ step_num }}: Choose Occupation*</h2>
+<form method="POST">
+    <div class="mb-4">
+        <select class="form-select" name="occupation" required>
+            <option value="" selected disabled>Select Occupation</option>
+            <option value="Massage Therapist" {% if data.occupation == 'Massage Therapist' %}selected{% endif %}>Massage Therapist</option>
+            <option value="Dentist" {% if data.occupation == 'Dentist' %}selected{% endif %}>Dentist</option>
+            <option value="Nutritionist" {% if data.occupation == 'Nutritionist' %}selected{% endif %}>Nutritionist</option>
+            <option value="Fitness Coach" {% if data.occupation == 'Fitness Coach' %}selected{% endif %}>Fitness Coach</option>
+            <option value="Pharmacist" {% if data.occupation == 'Pharmacist' %}selected{% endif %}>Pharmacist</option>
+            <option value="Hairdresser" {% if data.occupation == 'Hairdresser' %}selected{% endif %}>Hairdresser</option>
+            <option value="Makeup Artist" {% if data.occupation == 'Makeup Artist' %}selected{% endif %}>Makeup Artist</option>
+            <option value="Gynecologist" {% if data.occupation == 'Gynecologist' %}selected{% endif %}>Gynecologist</option>
+            <option value="Librarian" {% if data.occupation == 'Librarian' %}selected{% endif %}>Librarian</option>
+            <option value="Secretary" {% if data.occupation == 'Secretary' %}selected{% endif %}>Secretary</option>
+            <option value="Social Worker" {% if data.occupation == 'Social Worker' %}selected{% endif %}>Social Worker</option>
+            <option value="Fashion Designer" {% if data.occupation == 'Fashion Designer' %}selected{% endif %}>Fashion Designer</option>
+            <option value="Interior Designer" {% if data.occupation == 'Interior Designer' %}selected{% endif %}>Interior Designer</option>
+            <option value="Cook" {% if data.occupation == 'Cook' %}selected{% endif %}>Cook</option>
+            <option value="Designer" {% if data.occupation == 'Designer' %}selected{% endif %}>Designer</option>
+            <option value="Stylist" {% if data.occupation == 'Stylist' %}selected{% endif %}>Stylist</option>
+            <option value="Esthetician" {% if data.occupation == 'Esthetician' %}selected{% endif %}>Esthetician</option>
+            <option value="Yoga Instructor" {% if data.occupation == 'Yoga Instructor' %}selected{% endif %}>Yoga Instructor</option>
+            <option value="Flight Attendant" {% if data.occupation == 'Flight Attendant' %}selected{% endif %}>Flight Attendant</option>
+            <option value="Doctor" {% if data.occupation == 'Doctor' %}selected{% endif %}>Doctor</option>
+            <option value="Nurse" {% if data.occupation == 'Nurse' %}selected{% endif %}>Nurse</option>
+            <option value="Teacher" {% if data.occupation == 'Teacher' %}selected{% endif %}>Teacher</option>
+            <option value="Firefighter" {% if data.occupation == 'Firefighter' %}selected{% endif %}>Firefighter</option>
+            <option value="Police Officer" {% if data.occupation == 'Police Officer' %}selected{% endif %}>Police Officer</option>
+            <option value="Soldier" {% if data.occupation == 'Soldier' %}selected{% endif %}>Soldier</option>
+            <option value="Dancer" {% if data.occupation == 'Dancer' %}selected{% endif %}>Dancer</option>
+            <option value="Singer/Musician" {% if data.occupation == 'Singer/Musician' %}selected{% endif %}>Singer/Musician</option>
+            <option value="Spy" {% if data.occupation == 'Spy' %}selected{% endif %}>Spy</option>
+            <option value="Plane Pilot" {% if data.occupation == 'Plane Pilot' %}selected{% endif %}>Plane Pilot</option>
+            <option value="Professional Athlete" {% if data.occupation == 'Professional Athlete' %}selected{% endif %}>Professional Athlete</option>
+            <option value="Movie Star/Actress" {% if data.occupation == 'Movie Star/Actress' %}selected{% endif %}>Movie Star/Actress</option>
+            <option value="Photographer" {% if data.occupation == 'Photographer' %}selected{% endif %}>Photographer</option>
+            <option value="Artist" {% if data.occupation == 'Artist' %}selected{% endif %}>Artist</option>
+            <option value="Scientist" {% if data.occupation == 'Scientist' %}selected{% endif %}>Scientist</option>
+            <option value="Writer" {% if data.occupation == 'Writer' %}selected{% endif %}>Writer</option>
+            <option value="Lawyer" {% if data.occupation == 'Lawyer' %}selected{% endif %}>Lawyer</option>
+            <option value="Student" {% if data.occupation == 'Student' %}selected{% endif %}>Student</option>
+            <option value="Life Coach" {% if data.occupation == 'Life Coach' %}selected{% endif %}>Life Coach</option>
+            <option value="Kindergarten Teacher" {% if data.occupation == 'Kindergarten Teacher' %}selected{% endif %}>Kindergarten Teacher</option>
+            <option value="Florist" {% if data.occupation == 'Florist' %}selected{% endif %}>Florist</option>
+            <option value="Baker" {% if data.occupation == 'Baker' %}selected{% endif %}>Baker</option>
+            <option value="Jewelry Designer" {% if data.occupation == 'Jewelry Designer' %}selected{% endif %}>Jewelry Designer</option>
+            <option value="Soldier/Military Personnel" {% if data.occupation == 'Soldier/Military Personnel' %}selected{% endif %}>Soldier/Military Personnel</option>
+            <option value="Astronaut" {% if data.occupation == 'Astronaut' %}selected{% endif %}>Astronaut</option>
+            <option value="Model" {% if data.occupation == 'Model' %}selected{% endif %}>Model</option>
+        </select>
+    </div>
+    {% if error %}
+    <div class="alert alert-danger">{{ error }}</div>
+    {% endif %}
+    <div class="d-flex justify-content-between">
+        <button type="submit" name="previous" class="btn btn-secondary">Previous</button>
+        <button type="submit" name="next" class="btn btn-primary">Next</button>
+    </div>
+</form>
+{% endblock %}

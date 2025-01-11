@@ -1,14 +1,7 @@
 ###############################################################################
-# 1. ENVIRONMENT SETUP BEFORE IMPORTS
+# 1. IMPORTS & GLOBALS
 ###############################################################################
 import os
-
-# Set CUDA_VISIBLE_DEVICES before importing any CUDA-related libraries
-os.environ["CUDA_VISIBLE_DEVICES"] = "1"  # Replace "1" with "0" or the desired GPU index
-
-###############################################################################
-# 2. IMPORTS & GLOBAL VARIABLES
-###############################################################################
 import re
 import sys
 import random
@@ -19,67 +12,25 @@ import pandas as pd
 import torch
 import gradio as gr
 import nltk
+import json
+import time
 
-from PIL import Image
-from bs4 import BeautifulSoup
+from PIL import Image, PngImagePlugin
 from sentence_transformers import SentenceTransformer
 from sklearn.metrics.pairwise import cosine_similarity
-
-# If you have 'aichar' installed. Otherwise, remove or replace references.
-import aichar
-
-# For SDXL
 from diffusers import StableDiffusionXLPipeline
 import onnxruntime as rt
 import huggingface_hub
 
-# Initialize logging
+# If you have 'aichar' installed. Otherwise, remove or replace references.
+try:
+    import aichar
+    HAVE_AICHAR = True
+except ImportError:
+    HAVE_AICHAR = False
+
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
-
-###############################################################################
-# 3. VERIFY CUDA SETUP
-###############################################################################
-
-if torch.cuda.is_available():
-    current_device = torch.cuda.current_device()
-    device_name = torch.cuda.get_device_name(current_device)
-    logger.info(f"Using CUDA device {current_device}: {device_name}")
-else:
-    logger.info("CUDA is not available. Using CPU.")
-
-###############################################################################
-# 4. SETUP: PATHS, IMPORT PROMPTS, GLOBALS
-###############################################################################
-
-# Your local prompt directory, e.g. G:\Documents\GitHub\character-factory\app\prompts
-PROMPTS_DIR = r"G:\Documents\GitHub\character-factory\app\prompts"
-# Convert to an absolute path; helps Python find the modules
-PROMPTS_DIR = os.path.abspath(PROMPTS_DIR)
-
-# Add PROMPTS_DIR to Python's module search path
-if PROMPTS_DIR not in sys.path:
-    sys.path.append(PROMPTS_DIR)
-
-# Now import the prompt modules
-import prompt_name
-import prompt_summary
-import prompt_personality
-import prompt_scenario
-import prompt_greeting
-import prompt_example
-
-# If you have a separate prompt_nonnsfw_summary, import that if needed
-# import prompt_nonnsfw_summary
-
-# We'll read their `example_dialogue` lists
-PROMPT_NAME_EXAMPLES = getattr(prompt_name, "example_dialogue", ["Fallback name1", "Fallback name2"])
-PROMPT_SUMMARY_EXAMPLES = getattr(prompt_summary, "example_dialogue", ["Fallback summary1", "Fallback summary2"])
-PROMPT_PERSONALITY_EXAMPLES = getattr(prompt_personality, "example_dialogue",
-                                      ["Fallback personality1", "Fallback personality2"])
-PROMPT_SCENARIO_EXAMPLES = getattr(prompt_scenario, "example_dialogue", ["Fallback scenario1", "Fallback scenario2"])
-PROMPT_GREETING_EXAMPLES = getattr(prompt_greeting, "example_dialogue", ["Fallback greeting1", "Fallback greeting2"])
-PROMPT_EXAMPLE_DIALOGUES = getattr(prompt_example, "example_dialogue", ["Fallback example1", "Fallback example2"])
 
 # Default global URL for LLM completions
 global_url = "http://localhost:5001/api/v1/completions"
@@ -91,39 +42,53 @@ HF_TOKEN = "your_hf_token_here"
 global_avatar_prompt = ""
 processed_image_path = None
 
-# Path to your local SDXL single-file .safetensors model
-# Example:
+# Path to your local SDXL single-file model (e.g., a custom .safetensors)
 LOCAL_MODEL_PATH = r"G:\Documents\GitHub\character-factory\models\illustriousXLPersonalMerge_v30Noob10based.safetensors"
 
-# Our loaded SDXL pipeline
+# Our SDXL pipeline, loaded below
 sd = None
 
+###############################################################################
+# 2. IMPORT PROMPT MODULES DYNAMICALLY
+###############################################################################
+# We'll assume each prompt_*.py has a variable named `example_dialogue`
+PROMPTS_DIR = r"G:\Documents\GitHub\character-factory\app\prompts"
+PROMPTS_DIR = os.path.abspath(PROMPTS_DIR)
+
+if PROMPTS_DIR not in sys.path:
+    sys.path.append(PROMPTS_DIR)
+
+import prompt_name
+import prompt_summary
+import prompt_personality
+import prompt_scenario
+import prompt_greeting
+import prompt_example
+# ... if you have other prompt modules (e.g., prompt_nonnsfw_summary), import them similarly
+
+def safe_get_dialogues(module, fallback):
+    """
+    Get the 'example_dialogue' list from a module or return a fallback.
+    """
+    return getattr(module, "example_dialogue", fallback)
+
+PROMPT_NAME_EXAMPLES = safe_get_dialogues(prompt_name, ["fallback name1", "fallback name2"])
+PROMPT_SUMMARY_EXAMPLES = safe_get_dialogues(prompt_summary, ["fallback summary1", "fallback summary2"])
+PROMPT_PERSONALITY_EXAMPLES = safe_get_dialogues(prompt_personality, ["fallback personality1", "fallback personality2"])
+PROMPT_SCENARIO_EXAMPLES = safe_get_dialogues(prompt_scenario, ["fallback scenario1", "fallback scenario2"])
+PROMPT_GREETING_EXAMPLES = safe_get_dialogues(prompt_greeting, ["fallback greeting1", "fallback greeting2"])
+PROMPT_EXAMPLE_DIALOGUES = safe_get_dialogues(prompt_example, ["fallback example1", "fallback example2"])
 
 ###############################################################################
-# 5. UTILS / SHARED
+# 3. UTILS / SHARED
 ###############################################################################
 
 def process_url(url: str):
-    """
-    Sets the global_url for LLM completions.
-    """
     global global_url
     global_url = url.rstrip("/") + "/api/v1/completions"
     return f"URL Set: {global_url}"
 
-
-def send_message(prompt: str, max_new_tokens: int = 2048, max_tokens: int = 2048) -> str:
-    """
-    Sends the given prompt to your local or remote LLM API specified by global_url.
-
-    Parameters:
-    - prompt (str): The prompt to send to the LLM.
-    - max_new_tokens (int): The maximum number of new tokens to generate. Default is 2048.
-    - max_tokens (int): The maximum total number of tokens in the response. Default is 2048.
-
-    Returns:
-    - str: The generated response from the LLM or an error message.
-    """
+def send_message(prompt: str) -> str:
     global global_url
     if not global_url:
         return "Error: URL not set."
@@ -131,8 +96,8 @@ def send_message(prompt: str, max_new_tokens: int = 2048, max_tokens: int = 2048
     request_body = {
         "prompt": prompt,
         "max_length": 8192,
-        "max_new_tokens": max_new_tokens,  # Updated parameter
-        "max_tokens": max_tokens,  # Updated parameter
+        "max_new_tokens": 2048,
+        "max_tokens": 2048,
         "max_content_length": 8192,
         "do_sample": True,
         "temperature": 1,
@@ -141,58 +106,49 @@ def send_message(prompt: str, max_new_tokens: int = 2048, max_tokens: int = 2048
         "guidance_scale": 1,
         "sampler_seed": -1,
         "stop": [
-            "/s", "</s>", "<s>", "<|system|>", "<|assistant|>", "<|user|>", "<|char|>",
-            r"\n", "\nThijs:", "<|END_OF_TURN_TOKEN|>",
+            "/s","</s>","<s>","<|system|>","<|assistant|>","<|user|>","<|char|>",
+            r"\n","\nThijs:","<|END_OF_TURN_TOKEN|>",
             "<|START_OF_TURN_TOKEN|><|USER_TOKEN|>",
             "<|START_OF_TURN_TOKEN|><|CHATBOT_TOKEN|>",
             "<|START_OF_TURN_TOKEN|><|SYSTEM_TOKEN|>",
-            r"\n", "<|START_OF_TURN_TOKEN|><|SYSTEM_TOKEN|>New Roleplay:<|END_OF_TURN_TOKEN|>"
+            r"\n","<|START_OF_TURN_TOKEN|><|SYSTEM_TOKEN|>New Roleplay:<|END_OF_TURN_TOKEN|>"
         ],
         "stopping_strings": [
-            "/s", "</s>", "<s>", "<|system|>", "<|assistant|>", "<|user|>", "<|char|>",
-            r"\n", "\nThijs:", "<|END_OF_TURN_TOKEN|>",
+            "/s","</s>","<s>","<|system|>","<|assistant|>","<|user|>","<|char|>",
+            r"\n","\nThijs:","<|END_OF_TURN_TOKEN|>",
             "<|START_OF_TURN_TOKEN|><|USER_TOKEN|>",
             "<|START_OF_TURN_TOKEN|><|CHATBOT_TOKEN|>",
             "<|START_OF_TURN_TOKEN|><|SYSTEM_TOKEN|>",
-            r"\n", "<|START_OF_TURN_TOKEN|><|SYSTEM_TOKEN|>New Roleplay:<|END_OF_TURN_TOKEN|>"
+            r"\n","<|START_OF_TURN_TOKEN|><|SYSTEM_TOKEN|>New Roleplay:<|END_OF_TURN_TOKEN|>"
         ],
     }
-
     try:
-        response = requests.post(global_url, json=request_body)
-        response.raise_for_status()
-        result = response.json().get("choices", [{}])[0].get("text", "")
-        # Remove any trailing content after "<"
+        resp = requests.post(global_url, json=request_body)
+        resp.raise_for_status()
+        result = resp.json().get("choices", [{}])[0].get("text", "")
         result = result.split("<")[0]
-        return result.strip()
+        return result
     except requests.RequestException as e:
         return f"Error sending request: {e}"
-
 
 def input_none(text):
     return None if (text == "") else text
 
-
 def combined_avatar_prompt_action(prompt: str):
     global global_avatar_prompt
     global_avatar_prompt = prompt
-    return "Avatar prompt updated!", f"Using avatar prompt: {global_avatar_prompt}"
-
+    update_message = "Avatar prompt updated!"
+    use_message = f"Using avatar prompt: {global_avatar_prompt}"
+    return update_message, use_message
 
 ###############################################################################
-# 6. LOADING SDXL FROM A SINGLE-FILE
+# 4. LOADING SDXL FROM A SINGLE-FILE MODEL
 ###############################################################################
-
-from diffusers import StableDiffusionXLPipeline
-
 
 def load_sdxl_model():
-    """
-    Loads a single-file .safetensors SDXL model using StableDiffusionXLPipeline.
-    If your model is not truly SDXL or lacks the necessary config, this may fail.
-    """
     global sd
     model_path = LOCAL_MODEL_PATH
+
     if not os.path.exists(model_path):
         logger.error(f"Local model path does not exist: {model_path}")
         sys.exit(1)
@@ -203,21 +159,22 @@ def load_sdxl_model():
             sd = StableDiffusionXLPipeline.from_single_file(
                 model_path,
                 torch_dtype=torch.float16
-            ).to("cuda:0")  # Explicitly use the first visible GPU
-            print("SDXL model loaded in float16 on GPU 0.")
+            )
+            sd.to("cuda")
+            print("SDXL model loaded in float16 on GPU.")
         else:
             sd = StableDiffusionXLPipeline.from_single_file(
                 model_path,
                 torch_dtype=torch.float32
-            ).to("cpu")
+            )
+            sd.to("cpu")
             print("SDXL model loaded in float32 on CPU.")
     except Exception as e:
-        logger.error(f"Failed to load local model from {model_path}: {e}")
+        logger.error(f"Failed to load local model: {e}")
         sys.exit(1)
 
-
 ###############################################################################
-# 7. IMAGE CAPTIONING (ONNX)
+# 5. IMAGE CAPTIONING (ONNX)
 ###############################################################################
 import onnxruntime as rt
 import huggingface_hub
@@ -243,7 +200,6 @@ tags_df = None
 target_size = None
 current_model_repo = None
 
-
 def download_model(model_repo, hf_token=None):
     logger.info(f"Attempting to download model from {model_repo}")
     try:
@@ -260,7 +216,6 @@ def download_model(model_repo, hf_token=None):
         logger.warning(f"Failed to download model from {model_repo}: {str(e)}")
         return None, None
 
-
 def load_imagecaption_model(model_repo=None, hf_token=None):
     global imagecaption_model, tags_df, target_size, current_model_repo
 
@@ -272,13 +227,7 @@ def load_imagecaption_model(model_repo=None, hf_token=None):
                 try:
                     tags_df = pd.read_csv(csv_path)
                     imagecaption_model = rt.InferenceSession(model_path)
-                    input_shape = imagecaption_model.get_inputs()[0].shape
-                    if len(input_shape) == 4:
-                        _, _, target_size_, _ = input_shape
-                    elif len(input_shape) == 3:
-                        _, target_size_, _ = input_shape
-                    else:
-                        target_size_ = 224  # Default fallback
+                    _, target_size_, _, _ = imagecaption_model.get_inputs()[0].shape
                     target_size = target_size_
                     current_model_repo = repo
                     logger.info(f"Loaded imagecaption model from {repo} with target size: {target_size}")
@@ -291,7 +240,6 @@ def load_imagecaption_model(model_repo=None, hf_token=None):
         raise ValueError("Failed to load any model")
 
     return imagecaption_model, tags_df, target_size
-
 
 def prepare_image(image_array, target_size_):
     logger.info(f"Preparing image for inference. Target size: {target_size_}")
@@ -311,14 +259,12 @@ def prepare_image(image_array, target_size_):
     logger.info(f"Image preparation complete. Shape: {img_array.shape}")
     return img_array
 
-
 def predict_image_tags(model_session, img_array):
     logger.info("Running inference on the prepared image.")
     input_name = model_session.get_inputs()[0].name
     preds = model_session.run(None, {input_name: img_array})[0]
     logger.info(f"Predictions received. Shape: {preds.shape}")
     return preds
-
 
 def get_sorted_general_strings(image_or_path, model_repo=None, hf_token=HF_TOKEN, general_threshold=0.35):
     global imagecaption_model, tags_df, target_size
@@ -356,121 +302,16 @@ def get_sorted_general_strings(image_or_path, model_repo=None, hf_token=HF_TOKEN
 
     return ", ".join(sorted_tags)
 
-
 ###############################################################################
-# 8. WIKI
-###############################################################################
-nltk.download('punkt', quiet=True)
-
-
-def scrape_website(url):
-    try:
-        response = requests.get(url, timeout=10)
-        response.raise_for_status()
-        soup = BeautifulSoup(response.content, 'html.parser')
-        main_content = soup.find('div', class_='mw-parser-output')
-        if main_content:
-            text_content = []
-            for element in main_content.find_all(['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6']):
-                text_content.append(element.get_text())
-            content = ' '.join(text_content)
-        else:
-            content = soup.get_text()
-        if not content.strip():
-            raise ValueError("No text content found on the page")
-        return content
-    except requests.RequestException as e:
-        return f"Error fetching URL: {str(e)}"
-    except ValueError as e:
-        return str(e)
-    except Exception as e:
-        return f"Unexpected error: {str(e)}"
-
-
-class AdvancedVectorStorage:
-    def __init__(self):
-        self.model = SentenceTransformer('all-MiniLM-L6-v2')
-        self.vectors = []
-        self.texts = []
-
-    def add_text(self, text):
-        chunks = self.chunk_text(text)
-        for c in chunks:
-            self.texts.append(c)
-            self.vectors.append(self.model.encode(c))
-
-    def chunk_text(self, text, max_length=200):
-        words = text.split()
-        chunks = []
-        current_chunk = []
-        current_len = 0
-        for w in words:
-            if current_len + len(w) > max_length and current_chunk:
-                chunks.append(' '.join(current_chunk))
-                current_chunk = []
-                current_len = 0
-            current_chunk.append(w)
-            current_len += len(w) + 1
-        if current_chunk:
-            chunks.append(' '.join(current_chunk))
-        return chunks
-
-    def query(self, query_text, top_k=5):
-        query_vector = self.model.encode(query_text)
-        similarities = cosine_similarity([query_vector], self.vectors)[0]
-        top_indices = similarities.argsort()[-top_k:][::-1]
-        return [(self.texts[i], similarities[i]) for i in top_indices]
-
-
-def generate_character_summary_from_fandom(fandom_url, character_name=None, topic=None, gender=None, appearance=None):
-    content = scrape_website(fandom_url)
-    if content.startswith("Error") or content.startswith("Unexpected"):
-        return content
-
-    storage = AdvancedVectorStorage()
-    storage.add_text(content)
-
-    if not character_name:
-        character_name = fandom_url.split('/')[-1].replace('_', ' ')
-    if not topic:
-        topic = fandom_url.split('/')[2].split('.')[0].capitalize()
-
-    queries = [
-        f"What is {character_name}'s appearance and distinctive features?",
-        f"What are {character_name}'s personality traits and characteristics?",
-        f"What is {character_name}'s role or significance in {topic}?"
-    ]
-    relevant_info = []
-    for q in queries:
-        results = storage.query(q, top_k=3)
-        relevant_info.extend([t for t, _ in results])
-
-    context = " ".join(relevant_info)
-    if not context:
-        return f"Error: No relevant info about {character_name} from the URL."
-
-    base_prompt = (
-            f"Create a summary for {character_name} in the context of topic '{topic}'. "
-            f"Gender: {gender if gender else 'Unknown'}. "
-            f"Appearance: {appearance if appearance else 'None provided'}. "
-            "Also include relevant info from the wiki:\n" + context
-    )
-
-    final_summary = send_message(base_prompt).strip()
-    return final_summary
-
-
-###############################################################################
-# 9. IMPORT/EXPORT
+# 6. IMPORT/EXPORT
 ###############################################################################
 
 def find_image_path():
-    possible_paths = ["./app2/image.png", "./image.png"]
+    possible_paths = ["./app2/image.png","./image.png"]
     for path in possible_paths:
         if os.path.exists(path):
             return path
     return None
-
 
 image_path = find_image_path()
 if image_path:
@@ -478,10 +319,11 @@ if image_path:
 else:
     print("Image not found in any of the specified locations.")
 
-
 def import_character_json(json_path):
-    if json_path is not None:
-        character = aichar.load_character_json_file(json_path.name)
+    if not HAVE_AICHAR:
+        raise ValueError("aichar not installed. Cannot import character JSON.")
+    if json_path:
+        character = aichar.load_character_json_file(json_path)
         if character.name:
             return (
                 character.name,
@@ -491,12 +333,13 @@ def import_character_json(json_path):
                 character.greeting_message,
                 character.example_messages,
             )
-        raise ValueError("Error importing from JSON. Check file correctness.")
-
+    raise ValueError("Error importing from JSON. Check file correctness.")
 
 def import_character_card(card_path):
-    if card_path is not None:
-        character = aichar.load_character_card_file(card_path.name)
+    if not HAVE_AICHAR:
+        raise ValueError("aichar not installed. Cannot import from card.")
+    if card_path:
+        character = aichar.load_character_card_file(card_path)
         if character.name:
             return (
                 character.name,
@@ -506,24 +349,65 @@ def import_character_card(card_path):
                 character.greeting_message,
                 character.example_messages,
             )
-        raise ValueError("Error importing from card file. Check file correctness.")
+    raise ValueError("Error importing from card file. Check file correctness.")
 
+def export_as_json(name, summary, personality, scenario, greeting_message, example_messages, alternate_greetings):
+    """
+    Build a custom JSON structure manually.
+    - Removes "char_greeting" from the final JSON so it doesn't conflict with first_mes
+    - Splits user input for alternate greetings by newlines to form an array
+    """
+    # If user typed multiple lines in 'alternateGreetings', each line => item
+    greetings_list = []
+    if isinstance(alternate_greetings, str):
+        lines = [x.strip() for x in alternate_greetings.split('\n') if x.strip()]
+        if lines:
+            greetings_list = lines
+    elif isinstance(alternate_greetings, list):
+        greetings_list = alternate_greetings
+    else:
+        greetings_list = []
 
-def export_as_json(name, summary, personality, scenario, greeting_message, example_messages):
-    character = aichar.create_character(
-        name=name,
-        summary=summary,
-        personality=personality,
-        scenario=scenario,
-        greeting_message=greeting_message,
-        example_messages=example_messages,
-        image_path=""
-    )
-    return character.export_neutral_json()
+    ms_timestamp = int(time.time() * 1000)
 
+    custom_dict = {
+        "chara": {
+            "char_name": name,
+            "char_persona": personality,
+            "world_scenario": scenario,
+            # "char_greeting": greeting_message,  # REMOVED
+            "example_dialogue": ""
+        },
+        "name": name,
+        "description": summary,
+        "personality": personality,
+        "scenario": scenario,
+        "first_mes": greeting_message,
+        "mes_example": example_messages,
+        "alternate_greetings": greetings_list,
+        "metadata": {
+            "version": 1,
+            "created": ms_timestamp,
+            "modified": ms_timestamp,
+            "source": None,
+            "tool": {
+                "name": "aichar Python library",
+                "version": "0.5.1",
+                "url": "https://github.com/Hukasx0/aichar"
+            }
+        }
+    }
+
+    return json.dumps(custom_dict, ensure_ascii=False, indent=2)
 
 def export_character_card(name, summary, personality, scenario, greeting_message, example_messages):
-    global processed_image_path
+    """
+    Exports a .card.png using aichar, but it won't embed 'alternate_greetings' or custom fields.
+    """
+    if not HAVE_AICHAR:
+        logger.error("aichar not installed. Cannot export card.")
+        return None
+
     character_name = name.replace(" ", "_")
     base_path = f"characters/{character_name}/"
     os.makedirs(base_path, exist_ok=True)
@@ -536,7 +420,7 @@ def export_character_card(name, summary, personality, scenario, greeting_message
     if not os.path.exists(image_path_):
         logger.error(f"Image file not found: {image_path_}")
         # Create a default image
-        img = Image.new("RGB", (256, 256), color=(73, 109, 137))
+        img = Image.new("RGB", (256,256), color=(73,109,137))
         image_path_ = f"{base_path}{character_name}.png"
         img.save(image_path_)
 
@@ -553,7 +437,7 @@ def export_character_card(name, summary, personality, scenario, greeting_message
         card_path = f"{base_path}{character_name}.card.png"
         character.export_neutral_card_file(card_path)
         if os.path.exists(card_path):
-            return Image.open(card_path)
+            return card_path
         else:
             logger.error(f"Character card file not created: {card_path}")
             return None
@@ -561,188 +445,50 @@ def export_character_card(name, summary, personality, scenario, greeting_message
         logger.exception(f"Error creating character card: {str(e)}")
         return None
 
-
-###############################################################################
-# 10. CHARACTER GENERATION
-#    *Now uses the lists from the prompt_*.py files instead of hardcoded
-###############################################################################
-
-def generate_character_name(topic, gender, name, surname_checkbox):
-    example_dialogue = random.choice(PROMPT_NAME_EXAMPLES)
-    gender_txt = f"Character gender: {gender}." if gender else ""
-    surname_txt = "Add Surname" if surname_checkbox else ""
-    prompt = (
-            example_dialogue
-            + "\n<|user|> Generate a random character first name. "
-              f"Topic: {topic}. {gender_txt} {surname_txt}\n</s>\n<|assistant|>"
-    )
-    output = send_message(prompt)
-    output = re.sub(r"[^a-zA-Z0-9_ -]", "", output).strip()
-    return output
-
-
-def generate_character_summary(character_name, topic, gender):
-    from_prompt = random.choice(PROMPT_SUMMARY_EXAMPLES)
-    user_prompt = (
-        f"{from_prompt}\n"
-        f"<|user|> Create a longer description for {character_name}, "
-        f"Topic: {topic}, "
-        f"{'Character gender: ' + gender + '.' if gender else ''} "
-    )
-    # If we have an avatar prompt in global_avatar_prompt, add it
-    global global_avatar_prompt
-    if global_avatar_prompt:
-        user_prompt += f"This character has an appearance of {global_avatar_prompt}. Use those tags. "
-
-    user_prompt += "Make the summary descriptive. </s>\n<|assistant|>"
-
-    output = send_message(user_prompt).strip()
-    return output
-
-
-def generate_character_personality(character_name, character_summary, topic):
-    from_prompt = random.choice(PROMPT_PERSONALITY_EXAMPLES)
-    user_prompt = (
-        f"{from_prompt}\n"
-        f"<|user|> Describe the personality of {character_name}. "
-        f"Characteristics: {character_summary}. Tailor to {topic}.\n</s>\n<|assistant|>"
-    )
-    return send_message(user_prompt).strip()
-
-
-def generate_character_scenario(character_summary, character_personality, topic):
-    from_prompt = random.choice(PROMPT_SCENARIO_EXAMPLES)
-    user_prompt = (
-        f"{from_prompt}\n"
-        f"<|user|> Write a scenario for a roleplay with {{char}} & {{user}}. "
-        f"{{char}} has these traits: {character_summary}, {character_personality}. "
-        f"Theme: {topic}. No dialogues.\n</s>\n<|assistant|>"
-    )
-    return send_message(user_prompt).strip()
-
-
-def generate_character_greeting_message(character_name, character_summary, character_personality, topic):
-    from_prompt = random.choice(PROMPT_GREETING_EXAMPLES)
-    user_prompt = (
-        f"{from_prompt}\n"
-        f"<|user|> Create the first message from {character_name}, who has {character_summary},"
-        f"{character_personality}, theme {topic}, greeting {{user}}.\n</s>\n<|assistant|>"
-    )
-    raw_output = send_message(user_prompt).strip()
-    return clean_output_brackets(raw_output, character_name)
-
-
-def generate_example_messages(character_name, character_summary, character_personality, topic,
-                              switch_function_checkbox):
-    from_prompt = random.choice(PROMPT_EXAMPLE_DIALOGUES)
-    user_prompt = (
-        f"{from_prompt}\n"
-        f"<|user|> Create a dialogue between {{user}} and {{char}}. "
-        f"{{char}} is {character_name} with traits {character_summary}, {character_personality}, "
-        f"theme: {topic}. Make it interesting.\n</s>\n<|assistant|>"
-    )
-    raw_output = send_message(user_prompt).strip()
-    return clean_output_brackets(raw_output, character_name)
-
-
-def clean_output_brackets(raw_output: str, character_name: str) -> str:
-    def ensure_double_brackets(match):
-        return "{{" + match.group(1) + "}}"
-
-    cleaned = re.sub(r"\{{3,}(char|user)\}{3,}", ensure_double_brackets, raw_output)
-    cleaned = re.sub(r"\{{1,2}(char|user)\}{1,2}", ensure_double_brackets, cleaned)
-    if character_name:
-        cleaned = re.sub(r"\b" + re.escape(character_name) + r"\b", "{{char}}", cleaned)
-    cleaned = re.sub(r'\*\s*"', '"', cleaned)
-    cleaned = re.sub(r'"\s*\*', '"', cleaned)
-    return cleaned
-
-
-###############################################################################
-# 11. IMAGE GENERATION
-###############################################################################
-
-def fetch_avatar_prompt(character_name, character_summary, topic, gender):
-    # Escape any curly braces in character_summary to prevent .format() from misinterpreting them
-    escaped_summary = character_summary.replace('{', '{{').replace('}', '}}')
-
-    example_dialogue = """
-<|system|>
-You are a text generation tool, returning only tags describing the character's appearance with just danbooru like tags separated by commas, no sentences, no clip, pure danbooru tags. Do only describe the appearance of the character, do not add tags for hobbies, quirks, personality, etc.
-</s>
-<|user|>: Describe the appearance of Jamie Hale. Their characteristics Jamie Hale is a tall man standing at 6 feet with a confident and commanding presence. He has short, dark hair, piercing blue eyes, and an impeccable sense of style, often seen in tailored suits. Jamie exudes charisma and carries himself with an air of authority that draws people to him.</s>
-<|assistant|>: 1boy, tall, short dark hair, piercing blue eyes, tailored suits, </s>
-<|user|>: Describe the appearance of Mr. Fluffy. Their characteristics Mr. Fluffy is {{user}}'s cat who is very fat and fluffy, he has black and white colored fur, this cat is 3 years old, he loves special expensive cat food and lying on {{user}}'s lap while he does his homework.</s>
-<|assistant|>: 1cat, fat, fluffy, black and white fur, lying on lap</s>
-<|user|>: Describe the appearance of {character_name}. Their characteristics {gender} {escaped_summary}</s>
-<|assistant|>: 
-""".format(
-        character_name=character_name,
-        gender=gender,
-        escaped_summary=escaped_summary,
-        topic=topic
-    )
-
-    # Set max_new_tokens and max_tokens to 100 for avatar prompt generation
-    raw_prompt = send_message(example_dialogue, max_new_tokens=60, max_tokens=60)
-    return raw_prompt.strip()
-
-
-def generate_character_avatar(character_name, character_summary, topic, negative_prompt, avatar_prompt, gender,
-                              style_selection):
+def export_custom_png_with_json(
+    name, summary, personality, scenario,
+    greeting_message, example_messages, alternate_greetings
+):
     """
-    Generates a character avatar using the loaded SDXL pipeline.
+    1) Build your full JSON with export_as_json
+    2) If processed_image_path doesn't exist, use fallback
+    3) Embed that JSON into a new PNG with the "chara" chunk
+    4) Return the path to the newly saved .png
     """
-    if not avatar_prompt.strip():
-        avatar_prompt = fetch_avatar_prompt(character_name, character_summary, topic, gender)
+    custom_json_str = export_as_json(
+        name, summary, personality, scenario,
+        greeting_message, example_messages, alternate_greetings
+    )
 
-    # Determine the style prefix based on user selection (Radio Buttons)
-    if style_selection.lower() == "anime":
-        style_prefix = "anime, "
-    else:
-        style_prefix = "realistic, "
-
-    final_prompt = style_prefix + avatar_prompt.strip()
-
-    return image_generate(character_name, final_prompt, input_none(negative_prompt))
-
-
-def image_generate(character_name, prompt, negative_prompt):
     global processed_image_path
+    if processed_image_path and os.path.exists(processed_image_path):
+        source_img_path = processed_image_path
+    else:
+        source_img_path = "characters/uploaded_character/uploaded_character.png"
 
-    default_negative = (
-        "worst quality, low quality, blurry, text, watermark, logo, banner, "
-        "duplicate, poorly drawn, bad anatomy, missing limbs, extra limbs, "
-        "ugly face, multiple faces,"
-    )
-    negative_prompt = default_negative + " " + (negative_prompt or "")
+    if not os.path.exists(source_img_path):
+        logger.warning(f"Fallback: no user-uploaded or generated image found. Creating blank image.")
+        # Create a blank fallback
+        os.makedirs("characters/uploaded_character", exist_ok=True)
+        blank_path = "characters/uploaded_character/fallback.png"
+        Image.new("RGB", (256,256), color=(73,109,137)).save(blank_path)
+        source_img_path = blank_path
 
-    try:
-        # Make sure 'sd' is loaded from load_sdxl_model() using StableDiffusionXLPipeline
-        result = sd(
-            prompt=prompt,  # This prompt includes the style_prefix
-            negative_prompt=negative_prompt,
-            height=1152,
-            width=768,
-            num_inference_steps=30,
-            guidance_scale=5,
-        )
-        generated_image = result.images[0]
-    except Exception as e:
-        logger.error(f"Error generating image: {e}")
-        return None
-
-    safe_name = character_name.replace(" ", "_")
-    out_dir = os.path.join("characters", safe_name)
+    # Name the output path
+    character_name = name.replace(" ", "_") or "CustomChar"
+    out_dir = os.path.join("characters", character_name)
     os.makedirs(out_dir, exist_ok=True)
-    image_path = os.path.join(out_dir, f"{safe_name}.png")
-    generated_image.save(image_path, format="PNG")
+    out_path = os.path.join(out_dir, f"{character_name}.custom.card.png")
 
-    np_image = np.array(generated_image)
-    process_uploaded_image(np_image, save_as=f"{safe_name}_uploaded.png", out_dir=out_dir)
+    # Read the source image, embed JSON in PNG chunk
+    im = Image.open(source_img_path).convert("RGB")
+    png_info = PngImagePlugin.PngInfo()
+    # We'll store the entire JSON as raw text under the "chara" chunk
+    png_info.add_text("chara", custom_json_str)
 
-    return generated_image
-
+    im.save(out_path, "PNG", pnginfo=png_info)
+    logger.info(f"Exported custom PNG with full JSON to {out_path}")
+    return out_path
 
 def process_uploaded_image(uploaded_img, save_as="uploaded.png", out_dir="characters/uploaded_character"):
     global processed_image_path
@@ -759,33 +505,216 @@ def process_uploaded_image(uploaded_img, save_as="uploaded.png", out_dir="charac
     logger.info(f"Uploaded image saved at: {processed_image_path}")
     return pil_image
 
+###############################################################################
+# 7. CHARACTER GENERATION
+###############################################################################
+
+def clean_output_brackets(raw_output: str, character_name: str) -> str:
+    def ensure_double_brackets(match):
+        return "{{" + match.group(1) + "}}"
+    cleaned = re.sub(r"\{{3,}(char|user)\}{3,}", ensure_double_brackets, raw_output)
+    cleaned = re.sub(r"\{{1,2}(char|user)\}{1,2}", ensure_double_brackets, cleaned)
+
+    if character_name:
+        cleaned = re.sub(r"\b" + re.escape(character_name) + r"\b", "{{char}}", cleaned)
+    cleaned = re.sub(r'\*\s*"', '"', cleaned)
+    cleaned = re.sub(r'"\s*\*', '"', cleaned)
+    return cleaned
+
+def generate_character_name(topic, gender, name, surname_checkbox):
+    # Use dynamically imported examples
+    example_dialogue = random.choice(PROMPT_NAME_EXAMPLES)
+    gender_txt = f"Character gender: {gender}." if gender else ""
+    surname_txt = "Add Surname" if surname_checkbox else ""
+    prompt = (
+        example_dialogue
+        + "\n<|user|> Generate a random character first name. "
+        f"Topic: {topic}. {gender_txt} {surname_txt}\n</s>\n<|assistant|>"
+    )
+    output = send_message(prompt)
+    output = re.sub(r"[^a-zA-Z0-9_ -]", "", output).strip()
+    return output
+
+def generate_character_summary(character_name, topic, gender):
+    # Use dynamically imported examples
+    example_dialogue = random.choice(PROMPT_SUMMARY_EXAMPLES)
+    global global_avatar_prompt
+    appearance = global_avatar_prompt
+
+    user_prompt = (
+        f"{example_dialogue}\n"
+        f"<|user|> Create a longer description for a character named: {character_name}, "
+        f"Topic: {topic}, "
+        f"{'Character gender: ' + gender + '.' if gender else ''} "
+    )
+    if appearance:
+        user_prompt += f"This character has an appearance of {appearance}. Use those tags. "
+    user_prompt += "Make the summary descriptive. </s>\n<|assistant|>"
+
+    output = send_message(user_prompt).strip()
+    return output
+
+def generate_character_personality(character_name, character_summary, topic):
+    # Use dynamically imported examples
+    example_dialogue = random.choice(PROMPT_PERSONALITY_EXAMPLES)
+    user_prompt = (
+        f"{example_dialogue}\n"
+        f"<|user|> Describe the personality of {character_name}. "
+        f"Their characteristics: {character_summary}. Tailor them to {topic}.\n</s>\n<|assistant|>"
+    )
+    return send_message(user_prompt).strip()
+
+def generate_character_scenario(character_summary, character_personality, topic):
+    # Use dynamically imported examples
+    example_dialogue = random.choice(PROMPT_SCENARIO_EXAMPLES)
+    user_prompt = (
+        f"{example_dialogue}\n"
+        f"<|user|> Write a scenario for a roleplay with {{char}} & {{user}}. "
+        f"{{char}} has these traits: {character_summary}, {character_personality}. "
+        f"Theme: {topic}. No dialogues.\n</s>\n<|assistant|>"
+    )
+    return send_message(user_prompt).strip()
+
+def generate_character_greeting_message(character_name, character_summary, character_personality, topic):
+    # Use dynamically imported examples
+    example_dialogue = random.choice(PROMPT_GREETING_EXAMPLES)
+    user_prompt = (
+        example_dialogue
+        + "\n<|user|> Create the first message from "
+        + f"{character_name} who has {character_summary},{character_personality}, "
+        + f"theme {topic}, greeting {{user}}.\n</s>\n<|assistant|>"
+    )
+    raw_output = send_message(user_prompt).strip()
+    return clean_output_brackets(raw_output, character_name)
+
+def generate_alternate_greetings(character_name, character_summary, character_personality, topic):
+    """
+    Generates alternate greetings using the same logic as the main greeting generator.
+    """
+    example_dialogue = random.choice(PROMPT_GREETING_EXAMPLES)
+    user_prompt = (
+            example_dialogue
+            + "\n<|user|> Create the first message from "
+            + f"{character_name} who has {character_summary},{character_personality}, "
+            + f"theme {topic}, greeting {{user}}.\n</s>\n<|assistant|>"
+    )
+    raw_output = send_message(user_prompt).strip()
+
+    # Clean and split output into separate lines for each greeting
+    greetings = raw_output.split("\n")
+    greetings = [clean_output_brackets(greet.strip(), character_name) for greet in greetings if greet.strip()]
+    return greetings
+
+
+def generate_example_messages(character_name, character_summary, character_personality, topic, switch_function_checkbox):
+    # Use dynamically imported examples
+    example_dialogue = random.choice(PROMPT_EXAMPLE_DIALOGUES)
+    user_prompt = (
+        f"{example_dialogue}\n"
+        f"<|user|> Create a dialogue between {{user}} and {{char}}. "
+        f"{{char}} is {character_name} with traits {character_summary},{character_personality}, "
+        f"theme: {topic}. Make it interesting.\n</s>\n<|assistant|>"
+    )
+    raw_output = send_message(example_dialogue + user_prompt).strip()
+    return clean_output_brackets(raw_output, character_name)
 
 ###############################################################################
-# 12. UI / MAIN
+# 8. IMAGE GENERATION
+###############################################################################
+
+def fetch_avatar_prompt(character_summary, topic, gender):
+    example_dialogue = random.choice(PROMPT_SUMMARY_EXAMPLES)  # or any module as needed
+    system_prompt = f"""
+<|system|>
+You are a text generation tool, returning only tags describing the character's appearance.
+</s>
+<|user|>: 
+create a prompt that lists the appearance characteristics of a character 
+whose gender is {gender}, 
+whose summary is: {character_summary}.
+Theme: {topic}
+</s>
+<|assistant|>:
+"""
+    raw_prompt = send_message(system_prompt)
+    return raw_prompt.strip()
+
+def generate_character_avatar(character_name, character_summary, topic, negative_prompt, avatar_prompt, gender):
+    if not avatar_prompt.strip():
+        avatar_prompt = fetch_avatar_prompt(character_summary, topic, gender)
+
+    style_prefix = "anime, 2d, " if ("anime" in character_summary.lower() or "anime" in topic.lower()) else "realistic, 3d, "
+    final_prompt = style_prefix + avatar_prompt.strip()
+
+    return image_generate(character_name, final_prompt, input_none(negative_prompt))
+
+def image_generate(character_name, prompt, negative_prompt):
+    global processed_image_path
+    default_negative = (
+        "worst quality, low quality, blurry, text, watermark, logo, banner, "
+        "duplicate, poorly drawn, bad anatomy, missing limbs, extra limbs, "
+        "ugly face, multiple faces, etc."
+    )
+    negative_prompt = default_negative + " " + (negative_prompt or "")
+
+    try:
+        result = sd(
+            prompt=prompt,
+            negative_prompt=negative_prompt,
+            height=1152,
+            width=768,
+            num_inference_steps=50,
+            guidance_scale=5,
+        )
+        generated_image = result.images[0]
+    except Exception as e:
+        logger.error(f"Error generating image: {e}")
+        return None
+
+    safe_name = character_name.replace(" ", "_")
+    out_dir = os.path.join("characters", safe_name)
+    os.makedirs(out_dir, exist_ok=True)
+    image_path = os.path.join(out_dir, f"{safe_name}.png")
+    generated_image.save(image_path, format="PNG")
+
+    np_image = np.array(generated_image)
+    process_uploaded_image(np_image, save_as=f"{safe_name}_uploaded.png", out_dir=out_dir)
+    return generated_image
+
+###############################################################################
+# 9. INFINITE ALTERNATE GREETING LINES
+###############################################################################
+
+# This section is already handled within the Gradio UI as Alternate Greetings
+# via the `alternateGreetings` textarea and the `generate_alternate_greetings` function.
+
+###############################################################################
+# 10. UI / MAIN
 ###############################################################################
 
 def generate_tags_and_set_prompt(image):
     tags = get_sorted_general_strings(image)
     return tags
 
-
 def create_webui():
     with gr.Blocks() as webui:
+        # State for alternate greetings is managed via the textarea
+
         gr.Markdown("# Character Factory WebUI (SDXL Single-file)")
-        gr.Markdown("## KOBOLD MODE")
+        gr.Markdown("## KOBOLD MODE (No Wiki), with dynamic prompt modules")
 
         with gr.Row():
             url_input = gr.Textbox(label="Enter URL", value="http://127.0.0.1:5001")
             submit_button = gr.Button("Set URL")
-        output = gr.Textbox(label="URL Status")
-        submit_button.click(process_url, inputs=url_input, outputs=output)
+        url_status = gr.Textbox(label="URL Status", interactive=False)
+        submit_button.click(process_url, inputs=url_input, outputs=url_status)
 
         with gr.Tab("Edit character"):
             topic = gr.Textbox(label="Topic", placeholder="e.g. Fantasy, Anime, etc.")
-            gender = gr.Textbox(label="Gender", placeholder="M, F, etc.")
+            gender = gr.Textbox(label="Gender", placeholder="M, F, or similar")
 
             with gr.Column():
-                # Name
+                # Character name
                 with gr.Row():
                     name = gr.Textbox(label="Name", placeholder="Character name")
                     surname_checkbox = gr.Checkbox(label="Add Surname", value=False)
@@ -805,11 +734,6 @@ def create_webui():
                         inputs=[name, topic, gender],
                         outputs=summary
                     )
-
-                # UI placeholders for combined statuses
-                combined_status = gr.Textbox(label="Status", interactive=False)
-                prompt_usage_output = gr.Textbox(label="Prompt Usage", interactive=False)
-                combined_action_button = gr.Button("Update and Use Stable Diffusion Prompt")
 
                 # Personality
                 with gr.Row():
@@ -831,7 +755,7 @@ def create_webui():
                         outputs=scenario
                     )
 
-                # Greeting message + plus/minus buttons
+                # Greeting message
                 with gr.Row():
                     greeting_message = gr.Textbox(label="Greeting Message", placeholder="Character greeting message")
                     greeting_message_button = gr.Button("Generate character greeting message with LLM")
@@ -841,11 +765,26 @@ def create_webui():
                         outputs=greeting_message
                     )
 
+                # Alternate Greetings
+                with gr.Row():
+                    gr.Markdown("### Alternate Greetings")
+                alternate_greetings = gr.Textbox(
+                    label="Alternate Greetings",
+                    lines=5,
+                    placeholder="Enter each alternate greeting on a new line."
+                )
+                alternate_greetings_button = gr.Button("Generate Alternate Greetings with LLM")
+                alternate_greetings_button.click(
+                    generate_alternate_greetings,
+                    inputs=[name, summary, personality, topic],
+                    outputs=alternate_greetings
+                )
+
                 # Example messages
                 with gr.Row():
-                    switch_function_checkbox = gr.Checkbox(label="Use alternate example message generation",
-                                                           value=False)
-                    example_messages = gr.Textbox(label="Example Messages", placeholder="Character example messages")
+                    with gr.Column():
+                        switch_function_checkbox = gr.Checkbox(label="Use alternate example message generation", value=False)
+                        example_messages = gr.Textbox(label="Example Messages", placeholder="Character example messages")
                     example_messages_button = gr.Button("Generate character example messages with LLM")
                     example_messages_button.click(
                         generate_example_messages,
@@ -864,16 +803,11 @@ def create_webui():
                             outputs=[image_input]
                         )
                     with gr.Column():
-                        # Added Style Selection Radio Buttons
-                        style_selection = gr.Radio(
-                            choices=["Anime", "Realistic"],
-                            value="Anime",  # Default value
-                            label="Select Style",
-                            interactive=True
-                        )
-
                         negative_prompt = gr.Textbox(label="Negative Prompt", placeholder="(optional)")
                         avatar_prompt = gr.Textbox(label="Stable Diffusion Prompt", placeholder="(optional)")
+                        combined_action_button = gr.Button("Update and Use Stable Diffusion Prompt")
+                        combined_status = gr.Textbox(label="Status", interactive=False)
+                        prompt_usage_output = gr.Textbox(label="Prompt Usage", interactive=False)
                         combined_action_button.click(
                             combined_avatar_prompt_action,
                             inputs=avatar_prompt,
@@ -888,35 +822,30 @@ def create_webui():
                         avatar_button = gr.Button("Generate Avatar (SDXL)")
                         avatar_button.click(
                             generate_character_avatar,
-                            inputs=[name, summary, topic, negative_prompt, avatar_prompt, gender, style_selection],
+                            inputs=[name, summary, topic, negative_prompt, avatar_prompt, gender],
                             outputs=image_input
                         )
 
-        # Additional tabs: Wiki Character, Import, Export, etc.
-        with gr.Tab("Wiki Character"):
-            with gr.Column():
-                wiki_url = gr.Textbox(label="Fandom Wiki URL", placeholder="Paste character wiki URL")
-                wiki_character_name = gr.Textbox(label="Character Name", placeholder="(Optional override)")
-                wiki_topic = gr.Textbox(label="Topic/Series", placeholder="(Optional override, e.g. 'Zelda')")
-                wiki_gender = gr.Textbox(label="Gender (optional)")
-                wiki_appearance = gr.Textbox(label="Appearance (optional)")
+                # Export character
+                with gr.Row():
+                    export_json_button = gr.Button("Export as JSON")
+                    exported_json = gr.Textbox(label="Exported JSON", lines=6)
+                    export_json_button.click(
+                        export_as_json,
+                        inputs=[name, summary, personality, scenario, greeting_message, example_messages, alternate_greetings],
+                        outputs=exported_json
+                    )
 
-                wiki_generate_button = gr.Button("Generate Character Summary from Wiki")
-                wiki_summary_output = gr.Textbox(label="Generated Character Summary", lines=10)
+                with gr.Row():
+                    export_card_custom_button = gr.Button("Export as Custom PNG (All Fields)")
+                    exported_card_image = gr.Image(label="Exported Character Card")
+                    export_card_custom_button.click(
+                        export_custom_png_with_json,
+                        inputs=[name, summary, personality, scenario, greeting_message, example_messages, alternate_greetings],
+                        outputs=exported_card_image
+                    )
 
-                wiki_generate_button.click(
-                    generate_character_summary_from_fandom,
-                    inputs=[wiki_url, wiki_character_name, wiki_topic, wiki_gender, wiki_appearance],
-                    outputs=wiki_summary_output
-                )
-
-                wiki_update_button = gr.Button("Update Character with Wiki Summary")
-                wiki_update_button.click(
-                    lambda wname, wsummary: (wname, wsummary),
-                    inputs=[wiki_character_name, wiki_summary_output],
-                    outputs=[name, summary]
-                )
-
+        # Import character
         with gr.Tab("Import character"):
             with gr.Column():
                 with gr.Row():
@@ -927,42 +856,21 @@ def create_webui():
                     import_json_button = gr.Button("Import from JSON")
 
                 import_card_button.click(
-                    import_character_card,
+                    lambda file: import_character_card(file.name) if file else None,
                     inputs=[import_card_input],
                     outputs=[name, summary, personality, scenario, greeting_message, example_messages]
                 )
                 import_json_button.click(
-                    import_character_json,
+                    lambda file: import_character_json(file.name) if file else None,
                     inputs=[import_json_input],
                     outputs=[name, summary, personality, scenario, greeting_message, example_messages]
                 )
-
-        with gr.Tab("Export character"):
-            with gr.Column():
-                with gr.Row():
-                    export_image = gr.Image(width=512, height=512)
-                    export_json_textbox = gr.JSON()
-
-                with gr.Row():
-                    export_card_button = gr.Button("Export as Character Card")
-                    export_json_button = gr.Button("Export as JSON")
-
-                    export_card_button.click(
-                        export_character_card,
-                        inputs=[name, summary, personality, scenario, greeting_message, example_messages],
-                        outputs=export_image
-                    )
-                    export_json_button.click(
-                        export_as_json,
-                        inputs=[name, summary, personality, scenario, greeting_message, example_messages],
-                        outputs=export_json_textbox
-                    )
 
         gr.HTML("""
         <div style='text-align: center; font-size: 20px;'>
             <p>
               <a style="text-decoration: none; color: inherit;" href="https://github.com/thijsi123/character-factory">
-                Character Factory (SDXL Single-file)
+                Character Factory (SDXL Single-file, No Wiki, Infinite Alt Greetings)
               </a> 
               by 
               <a style="text-decoration: none; color: inherit;" href="https://github.com/Hukasx0">
@@ -978,12 +886,10 @@ def create_webui():
 
     return webui
 
-
 def main():
-    load_sdxl_model()  # Load the single-file .safetensors (SDXL)
+    load_sdxl_model()
     webui = create_webui()
     webui.launch(debug=True)
-
 
 if __name__ == "__main__":
     main()

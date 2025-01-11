@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Step {{ step_num }}: Choose Breast Size*</h2>
+<form method="POST">
+    <div class="mb-4">
+        <div class="btn-group" role="group" aria-label="Breast Size">
+            <input type="radio" class="btn-check" name="breast_size" id="flat" value="Flat" autocomplete="off" {% if data.breast_size == 'Flat' %}checked{% endif %} required>
+            <label class="btn btn-outline-primary" for="flat">Flat</label>
+
+            <input type="radio" class="btn-check" name="breast_size" id="small" value="Small" autocomplete="off" {% if data.breast_size == 'Small' %}checked{% endif %}>
+            <label class="btn btn-outline-primary" for="small">Small</label>
+
+            <input type="radio" class="btn-check" name="breast_size" id="medium" value="Medium" autocomplete="off" {% if data.breast_size == 'Medium' %}checked{% endif %}>
+            <label class="btn btn-outline-primary" for="medium">Medium</label>
+
+            <input type="radio" class="btn-check" name="breast_size" id="large" value="Large" autocomplete="off" {% if data.breast_size == 'Large' %}checked{% endif %}>
+            <label class="btn btn-outline-primary" for="large">Large</label>
+
+            <input type="radio" class="btn-check" name="breast_size" id="huge" value="Huge" autocomplete="off" {% if data.breast_size == 'Huge' %}checked{% endif %}>
+            <label class="btn btn-outline-primary" for="huge">Huge</label>
+        </div>
+    </div>
+    {% if error %}
+    <div class="alert alert-danger">{{ error }}</div>
+    {% endif %}
+    <div class="d-flex justify-content-between">
+        <button type="submit" name="previous" class="btn btn-secondary">Previous</button>
+        <button type="submit" name="next" class="btn btn-primary">Next</button>
+    </div>
+</form>
+{% endblock %}

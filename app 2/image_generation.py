@@ -1,3 +1,5 @@
+# image_generation.py
+
 from utils import sd, send_message, input_none
 import os
 from PIL import Image

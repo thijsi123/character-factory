@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Step {{ step_num }}: Choose Hair Style*</h2>
+<form method="POST">
+    <div class="mb-4">
+        <div class="btn-group" role="group" aria-label="Hair Style">
+            <input type="radio" class="btn-check" name="hair_style" id="straight" value="Straight" autocomplete="off" {% if data.hair_style == 'Straight' %}checked{% endif %} required>
+            <label class="btn btn-outline-primary" for="straight">Straight</label>
+
+            <input type="radio" class="btn-check" name="hair_style" id="braids" value="Braids" autocomplete="off" {% if data.hair_style == 'Braids' %}checked{% endif %}>
+            <label class="btn btn-outline-primary" for="braids">Braids</label>
+
+            <input type="radio" class="btn-check" name="hair_style" id="bangs" value="Bangs" autocomplete="off" {% if data.hair_style == 'Bangs' %}checked{% endif %}>
+            <label class="btn btn-outline-primary" for="bangs">Bangs</label>
+
+            <input type="radio" class="btn-check" name="hair_style" id="curly" value="Curly" autocomplete="off" {% if data.hair_style == 'Curly' %}checked{% endif %}>
+            <label class="btn btn-outline-primary" for="curly">Curly</label>
+
+            <input type="radio" class="btn-check" name="hair_style" id="bun" value="Bun" autocomplete="off" {% if data.hair_style == 'Bun' %}checked{% endif %}>
+            <label class="btn btn-outline-primary" for="bun">Bun</label>
+
+            <input type="radio" class="btn-check" name="hair_style" id="short" value="Short" autocomplete="off" {% if data.hair_style == 'Short' %}checked{% endif %}>
+            <label class="btn btn-outline-primary" for="short">Short</label>
+
+            <input type="radio" class="btn-check" name="hair_style" id="long" value="Long" autocomplete="off" {% if data.hair_style == 'Long' %}checked{% endif %}>
+            <label class="btn btn-outline-primary" for="long">Long</label>
+
+            <input type="radio" class="btn-check" name="hair_style" id="ponytail" value="Ponytail" autocomplete="off" {% if data.hair_style == 'Ponytail' %}checked{% endif %}>
+            <label class="btn btn-outline-primary" for="ponytail">Ponytail</label>
+
+            <input type="radio" class="btn-check" name="hair_style" id="pigtails" value="Pigtails" autocomplete="off" {% if data.hair_style == 'Pigtails' %}checked{% endif %}>
+            <label class="btn btn-outline-primary" for="pigtails">Pigtails</label>
+        </div>
+    </div>
+    {% if error %}
+    <div class="alert alert-danger">{{ error }}</div>
+    {% endif %}
+    <div class="d-flex justify-content-between">
+        <button type="submit" name="previous" class="btn btn-secondary">Previous</button>
+        <button type="submit" name="next" class="btn btn-primary">Next</button>
+    </div>
+</form>
+{% endblock %}

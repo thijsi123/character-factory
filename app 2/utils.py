@@ -1,3 +1,5 @@
+# utils.py
+
 import os
 import requests
 from diffusers import StableDiffusionPipeline

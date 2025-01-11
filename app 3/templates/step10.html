@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Step {{ step_num }}: Choose Voice*</h2>
+<form method="POST">
+    <div class="mb-4">
+        <div class="btn-group" role="group" aria-label="Voice">
+            {% for i in range(1, 10) %}
+                <input type="radio" class="btn-check" name="voice" id="voice{{ i }}" value="Voice {{ i }}" autocomplete="off" {% if data.voice == 'Voice ' ~ i %}checked{% endif %} required>
+                <label class="btn btn-outline-primary" for="voice{{ i }}">Voice {{ i }}</label>
+            {% endfor %}
+        </div>
+    </div>
+    {% if error %}
+    <div class="alert alert-danger">{{ error }}</div>
+    {% endif %}
+    <div class="d-flex justify-content-between">
+        <button type="submit" name="previous" class="btn btn-secondary">Previous</button>
+        <button type="submit" name="next" class="btn btn-primary">Next</button>
+    </div>
+</form>
+{% endblock %}

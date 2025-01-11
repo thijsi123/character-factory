@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Step {{ step_num }}: Choose Clothing*</h2>
+<form method="POST">
+    <div class="mb-4">
+        <select class="form-select" name="clothing" required>
+            <option value="" selected disabled>Select Clothing</option>
+            <option value="Bikini" {% if data.clothing == 'Bikini' %}selected{% endif %}>Bikini</option>
+            <option value="Pencil Dress" {% if data.clothing == 'Pencil Dress' %}selected{% endif %}>Pencil Dress</option>
+            <option value="Long Dress" {% if data.clothing == 'Long Dress' %}selected{% endif %}>Long Dress</option>
+            <option value="Woman Basketball Jersey" {% if data.clothing == 'Woman Basketball Jersey' %}selected{% endif %}>Woman Basketball Jersey</option>
+            <option value="Cheerleader" {% if data.clothing == 'Cheerleader' %}selected{% endif %}>Cheerleader</option>
+            <option value="Skirt" {% if data.clothing == 'Skirt' %}selected{% endif %}>Skirt</option>
+            <option value="Tennis" {% if data.clothing == 'Tennis' %}selected{% endif %}>Tennis</option>
+            <option value="Soccer" {% if data.clothing == 'Soccer' %}selected{% endif %}>Soccer</option>
+            <option value="Swimsuit" {% if data.clothing == 'Swimsuit' %}selected{% endif %}>Swimsuit</option>
+            <option value="Lab Coat" {% if data.clothing == 'Lab Coat' %}selected{% endif %}>Lab Coat</option>
+            <option value="Santa Claus" {% if data.clothing == 'Santa Claus' %}selected{% endif %}>Santa Claus</option>
+            <option value="Sailor" {% if data.clothing == 'Sailor' %}selected{% endif %}>Sailor</option>
+            <option value="Pyjamas" {% if data.clothing == 'Pyjamas' %}selected{% endif %}>Pyjamas</option>
+            <option value="Sport" {% if data.clothing == 'Sport' %}selected{% endif %}>Sport</option>
+            <option value="Fancy Dress" {% if data.clothing == 'Fancy Dress' %}selected{% endif %}>Fancy Dress</option>
+            <option value="Carnival" {% if data.clothing == 'Carnival' %}selected{% endif %}>Carnival</option>
+            <option value="Wedding Dress" {% if data.clothing == 'Wedding Dress' %}selected{% endif %}>Wedding Dress</option>
+            <option value="Flight Attendant" {% if data.clothing == 'Flight Attendant' %}selected{% endif %}>Flight Attendant</option>
+            <option value="Clown" {% if data.clothing == 'Clown' %}selected{% endif %}>Clown</option>
+            <option value="Jeans" {% if data.clothing == 'Jeans' %}selected{% endif %}>Jeans</option>
+            <option value="Latex Outfit" {% if data.clothing == 'Latex Outfit' %}selected{% endif %}>Latex Outfit</option>
+            <option value="Princess Dress" {% if data.clothing == 'Princess Dress' %}selected{% endif %}>Princess Dress</option>
+            <option value="Corset" {% if data.clothing == 'Corset' %}selected{% endif %}>Corset</option>
+            <option value="Leggings" {% if data.clothing == 'Leggings' %}selected{% endif %}>Leggings</option>
+            <option value="Yoga Outfit" {% if data.clothing == 'Yoga Outfit' %}selected{% endif %}>Yoga Outfit</option>
+            <option value="Lingerie" {% if data.clothing == 'Lingerie' %}selected{% endif %}>Lingerie</option>
+            <option value="Summer Dress" {% if data.clothing == 'Summer Dress' %}selected{% endif %}>Summer Dress</option>
+            <option value="School Outfit" {% if data.clothing == 'School Outfit' %}selected{% endif %}>School Outfit</option>
+            <option value="Witch" {% if data.clothing == 'Witch' %}selected{% endif %}>Witch</option>
+            <option value="Leather Outfit" {% if data.clothing == 'Leather Outfit' %}selected{% endif %}>Leather Outfit</option>
+            <option value="Maid" {% if data.clothing == 'Maid' %}selected{% endif %}>Maid</option>
+            <option value="Woman Medieval Armor" {% if data.clothing == 'Woman Medieval Armor' %}selected{% endif %}>Woman Medieval Armor</option>
+            <option value="Cowboy" {% if data.clothing == 'Cowboy' %}selected{% endif %}>Cowboy</option>
+            <option value="Viking" {% if data.clothing == 'Viking' %}selected{% endif %}>Viking</option>
+            <option value="Casual" {% if data.clothing == 'Casual' %}selected{% endif %}>Casual</option>
+            <option value="Nurse" {% if data.clothing == 'Nurse' %}selected{% endif %}>Nurse</option>
+            <option value="Police" {% if data.clothing == 'Police' %}selected{% endif %}>Police</option>
+            <option value="Steampunk" {% if data.clothing == 'Steampunk' %}selected{% endif %}>Steampunk</option>
+            <option value="Superhero" {% if data.clothing == 'Superhero' %}selected{% endif %}>Superhero</option>
+            <option value="Teacher" {% if data.clothing == 'Teacher' %}selected{% endif %}>Teacher</option>
+            <option value="Firefighter" {% if data.clothing == 'Firefighter' %}selected{% endif %}>Firefighter</option>
+            <option value="Military" {% if data.clothing == 'Military' %}selected{% endif %}>Military</option>
+            <option value="Construction" {% if data.clothing == 'Construction' %}selected{% endif %}>Construction</option>
+            <option value="Long Coat" {% if data.clothing == 'Long Coat' %}selected{% endif %}>Long Coat</option>
+            <option value="Ninja" {% if data.clothing == 'Ninja' %}selected{% endif %}>Ninja</option>
+            <option value="Angel" {% if data.clothing == 'Angel' %}selected{% endif %}>Angel</option>
+            <option value="Barista" {% if data.clothing == 'Barista' %}selected{% endif %}>Barista</option>
+            <option value="Belly Dancer" {% if data.clothing == 'Belly Dancer' %}selected{% endif %}>Belly Dancer</option>
+            <option value="Goth" {% if data.clothing == 'Goth' %}selected{% endif %}>Goth</option>
+            <option value="Pirate" {% if data.clothing == 'Pirate' %}selected{% endif %}>Pirate</option>
+            <option value="Prisoner" {% if data.clothing == 'Prisoner' %}selected{% endif %}>Prisoner</option>
+            <option value="Onesie" {% if data.clothing == 'Onesie' %}selected{% endif %}>Onesie</option>
+            <option value="Tutu" {% if data.clothing == 'Tutu' %}selected{% endif %}>Tutu</option>
+            <option value="Poncho" {% if data.clothing == 'Poncho' %}selected{% endif %}>Poncho</option>
+            <option value="Hiphop" {% if data.clothing == 'Hiphop' %}selected{% endif %}>Hiphop</option>
+            <option value="Skatepark" {% if data.clothing == 'Skatepark' %}selected{% endif %}>Skatepark</option>
+            <option value="Adventurer" {% if data.clothing == 'Adventurer' %}selected{% endif %}>Adventurer</option>
+            <option value="Lumberjack" {% if data.clothing == 'Lumberjack' %}selected{% endif %}>Lumberjack</option>
+            <option value="Golf" {% if data.clothing == 'Golf' %}selected{% endif %}>Golf</option>
+            <option value="Hijab" {% if data.clothing == 'Hijab' %}selected{% endif %}>Hijab</option>
+            <option value="Oversized Shirt" {% if data.clothing == 'Oversized Shirt' %}selected{% endif %}>Oversized Shirt</option>
+            <option value="Tribal" {% if data.clothing == 'Tribal' %}selected{% endif %}>Tribal</option>
+            <option value="Secretary" {% if data.clothing == 'Secretary' %}selected{% endif %}>Secretary</option>
+            <option value="Pop Star" {% if data.clothing == 'Pop Star' %}selected{% endif %}>Pop Star</option>
+            <option value="Hoodie" {% if data.clothing == 'Hoodie' %}selected{% endif %}>Hoodie</option>
+            <option value="Race Driver" {% if data.clothing == 'Race Driver' %}selected{% endif %}>Race Driver</option>
+        </select>
+    </div>
+    {% if error %}
+    <div class="alert alert-danger">{{ error }}</div>
+    {% endif %}
+    <div class="d-flex justify-content-between">
+        <button type="submit" name="previous" class="btn btn-secondary">Previous</button>
+        <button type="submit" name="next" class="btn btn-primary">Next</button>
+    </div>
+</form>
+{% endblock %}

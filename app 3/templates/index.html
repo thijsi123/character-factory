@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="text-center">
+    <h1>Welcome to the AI Character Creator</h1>
+    <p>Create your personalized AI character by following the steps below.</p>
+    <a href="{{ url_for('step', step_num=1) }}" class="btn btn-primary btn-lg">Start</a>
+</div>
+{% endblock %}

@@ -5,12 +5,37 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="cddb8e47-998b-41f9-bb95-e53d6af67c3d" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/app 2/char_input.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app 2/vector.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app 2/wiki.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app 3/app.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app 3/templates/base.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app 3/templates/index.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app 3/templates/step1.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app 3/templates/step10.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app 3/templates/step11.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app 3/templates/step12.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app 3/templates/step13.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app 3/templates/step14.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app 3/templates/step2.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app 3/templates/step3.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app 3/templates/step4.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app 3/templates/step5.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app 3/templates/step6.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app 3/templates/step7.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app 3/templates/step8.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app 3/templates/step9.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app 3/templates/summary.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/app.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/koboldcpp - webui2.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/logic.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/experiments/names.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/character-factory.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/character-factory.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app 2/image_generation.py" beforeDir="false" afterPath="$PROJECT_DIR$/app 2/image_generation.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app 2/imagecaption.py" beforeDir="false" afterPath="$PROJECT_DIR$/app 2/imagecaption.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app 2/import_export.py" beforeDir="false" afterPath="$PROJECT_DIR$/app 2/import_export.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app 2/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/app 2/main.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app 2/ui.py" beforeDir="false" afterPath="$PROJECT_DIR$/app 2/ui.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app 2/utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/app 2/utils.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/koboldcpp - webui.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/koboldcpp - webui.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -38,12 +63,16 @@
   &quot;associatedIndex&quot;: 1
 }</component>
   <component name="ProjectId" id="2bnmFaWI2Z34DB3HDg0Gdu9GdBl" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "Python.app.executor": "Run",
     "Python.asad.executor": "Run",
     "Python.char_input.executor": "Run",
     "Python.character_generation.executor": "Run",
@@ -52,7 +81,10 @@
     "Python.infermatic - webui.executor": "Run",
     "Python.koboldcpp - webui.executor": "Run",
     "Python.main.executor": "Run",
+    "Python.names.executor": "Run",
+    "Python.prompt_summary.executor": "Run",
     "Python.search.executor": "Run",
+    "Python.server.executor": "Run",
     "Python.test (2).executor": "Run",
     "Python.test upscale.executor": "Run",
     "Python.test.executor": "Run",
@@ -62,23 +94,33 @@
     "Python.web.executor": "Run",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "com.codeium.enabled": "true",
     "git-widget-placeholder": "master",
     "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "G:/Documents/GitHub/character-factory/app 2/prompts",
+    "last_opened_file_path": "G:/Documents/GitHub/character-factory/app",
     "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
   }
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="G:\Documents\GitHub\character-factory\app" />
       <recent name="G:\Documents\GitHub\character-factory\app 2\prompts" />
       <recent name="G:\Documents\GitHub\character-factory\app 2" />
-      <recent name="G:\Documents\GitHub\character-factory\app" />
       <recent name="G:\Documents\GitHub\character-factory\esgran" />
       <recent name="G:\Documents\GitHub\character-factory" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="G:\Documents\GitHub\character-factory\app 3\templates" />
       <recent name="G:\Documents\GitHub\character-factory\app 2" />
     </key>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-python-sdk-fb887030ada0-aa17d162503b-com.jetbrains.pycharm.community.sharedIndexes.bundled-PC-243.21565.199" />
+      </set>
+    </attachedChunks>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">

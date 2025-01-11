@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Step {{ step_num }}: Choose Butt Size*</h2>
+<form method="POST">
+    <div class="mb-4">
+        <div class="btn-group" role="group" aria-label="Butt Size">
+            <input type="radio" class="btn-check" name="butt_size" id="small" value="Small" autocomplete="off" {% if data.butt_size == 'Small' %}checked{% endif %} required>
+            <label class="btn btn-outline-primary" for="small">Small</label>
+
+            <input type="radio" class="btn-check" name="butt_size" id="medium" value="Medium" autocomplete="off" {% if data.butt_size == 'Medium' %}checked{% endif %}>
+            <label class="btn btn-outline-primary" for="medium">Medium</label>
+
+            <input type="radio" class="btn-check" name="butt_size" id="large" value="Large" autocomplete="off" {% if data.butt_size == 'Large' %}checked{% endif %}>
+            <label class="btn btn-outline-primary" for="large">Large</label>
+
+            <input type="radio" class="btn-check" name="butt_size" id="skinny" value="Skinny" autocomplete="off" {% if data.butt_size == 'Skinny' %}checked{% endif %}>
+            <label class="btn btn-outline-primary" for="skinny">Skinny</label>
+
+            <input type="radio" class="btn-check" name="butt_size" id="athletic" value="Athletic" autocomplete="off" {% if data.butt_size == 'Athletic' %}checked{% endif %}>
+            <label class="btn btn-outline-primary" for="athletic">Athletic</label>
+        </div>
+    </div>
+    {% if error %}
+    <div class="alert alert-danger">{{ error }}</div>
+    {% endif %}
+    <div class="d-flex justify-content-between">
+        <button type="submit" name="previous" class="btn btn-secondary">Previous</button>
+        <button type="submit" name="next" class="btn btn-primary">Next</button>
+    </div>
+</form>
+{% endblock %}

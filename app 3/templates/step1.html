@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Step {{ step_num }}: Choose Style*</h2>
+<form method="POST">
+    <div class="mb-4">
+        <div class="btn-group" role="group" aria-label="Style">
+            <input type="radio" class="btn-check" name="style" id="realistic" value="Realistic" autocomplete="off" {% if data.style == 'Realistic' %}checked{% endif %} required>
+            <label class="btn btn-outline-primary" for="realistic">Realistic</label>
+
+            <input type="radio" class="btn-check" name="style" id="anime" value="Anime" autocomplete="off" {% if data.style == 'Anime' %}checked{% endif %}>
+            <label class="btn btn-outline-primary" for="anime">Anime</label>
+        </div>
+    </div>
+    {% if error %}
+    <div class="alert alert-danger">{{ error }}</div>
+    {% endif %}
+    <div class="d-flex justify-content-between">
+        <!-- No Previous button on the first step -->
+        <div></div>
+        <button type="submit" name="next" class="btn btn-primary">Next</button>
+    </div>
+</form>
+{% endblock %}

@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Step {{ step_num }}: Choose Eye Color*</h2>
+<form method="POST">
+    <div class="mb-4">
+        <div class="btn-group" role="group" aria-label="Eye Color">
+            <input type="radio" class="btn-check" name="eye_color" id="brown" value="Brown" autocomplete="off" {% if data.eye_color == 'Brown' %}checked{% endif %} required>
+            <label class="btn btn-outline-primary" for="brown">Brown</label>
+
+            <input type="radio" class="btn-check" name="eye_color" id="blue" value="Blue" autocomplete="off" {% if data.eye_color == 'Blue' %}checked{% endif %}>
+            <label class="btn btn-outline-primary" for="blue">Blue</label>
+
+            <input type="radio" class="btn-check" name="eye_color" id="green" value="Green" autocomplete="off" {% if data.eye_color == 'Green' %}checked{% endif %}>
+            <label class="btn btn-outline-primary" for="green">Green</label>
+        </div>
+    </div>
+    {% if error %}
+    <div class="alert alert-danger">{{ error }}</div>
+    {% endif %}
+    <div class="d-flex justify-content-between">
+        <button type="submit" name="previous" class="btn btn-secondary">Previous</button>
+        <button type="submit" name="next" class="btn btn-primary">Next</button>
+    </div>
+</form>
+{% endblock %}

@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Step {{ step_num }}: Choose Hair Color*</h2>
+<form method="POST">
+    <div class="mb-4">
+        <div class="btn-group" role="group" aria-label="Hair Color">
+            <input type="radio" class="btn-check" name="hair_color" id="blonde" value="Blonde" autocomplete="off" {% if data.hair_color == 'Blonde' %}checked{% endif %} required>
+            <label class="btn btn-outline-primary" for="blonde">Blonde</label>
+
+            <input type="radio" class="btn-check" name="hair_color" id="brunette" value="Brunette" autocomplete="off" {% if data.hair_color == 'Brunette' %}checked{% endif %}>
+            <label class="btn btn-outline-primary" for="brunette">Brunette</label>
+
+            <input type="radio" class="btn-check" name="hair_color" id="black" value="Black" autocomplete="off" {% if data.hair_color == 'Black' %}checked{% endif %}>
+            <label class="btn btn-outline-primary" for="black">Black</label>
+
+            <input type="radio" class="btn-check" name="hair_color" id="redhead" value="Redhead" autocomplete="off" {% if data.hair_color == 'Redhead' %}checked{% endif %}>
+            <label class="btn btn-outline-primary" for="redhead">Redhead</label>
+
+            <input type="radio" class="btn-check" name="hair_color" id="pink" value="Pink" autocomplete="off" {% if data.hair_color == 'Pink' %}checked{% endif %}>
+            <label class="btn btn-outline-primary" for="pink">Pink</label>
+        </div>
+    </div>
+    {% if error %}
+    <div class="alert alert-danger">{{ error }}</div>
+    {% endif %}
+    <div class="d-flex justify-content-between">
+        <button type="submit" name="previous" class="btn btn-secondary">Previous</button>
+        <button type="submit" name="next" class="btn btn-primary">Next</button>
+    </div>
+</form>
+{% endblock %}

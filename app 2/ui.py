@@ -1,3 +1,5 @@
+# ui.py
+
 import gradio as gr
 from character_generation import *
 from image_generation import *
