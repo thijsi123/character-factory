@@ -335,8 +335,7 @@ def create_webui():
                             example_messages,  # 7
                             *alternate_greetings
                         ],
-                        outputs=export_image,
-
+                        outputs=export_json_textbox,
                     )
                     # This button call exports to JSON
                     export_json_button.click(

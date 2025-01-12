@@ -1,5 +1,5 @@
 import os
-import aicharl as aichar
+import aichar
 import requests
 from diffusers import StableDiffusionPipeline
 import torch

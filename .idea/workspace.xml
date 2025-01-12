@@ -5,37 +5,28 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="cddb8e47-998b-41f9-bb95-e53d6af67c3d" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/app 3/app.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app 3/templates/base.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app 3/templates/index.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app 3/templates/step1.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app 3/templates/step10.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app 3/templates/step11.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app 3/templates/step12.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app 3/templates/step13.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app 3/templates/step14.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app 3/templates/step2.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app 3/templates/step3.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app 3/templates/step4.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app 3/templates/step5.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app 3/templates/step6.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app 3/templates/step7.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app 3/templates/step8.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app 3/templates/step9.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app 3/templates/summary.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/app.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/koboldcpp - webui2.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/logic.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/experiments/names.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/character-factory.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/character-factory.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app 2/aicharl.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app 2/char_input.py" beforeDir="false" afterPath="$PROJECT_DIR$/app 2/char_input.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app 2/character_generation - Copy.py" beforeDir="false" afterPath="$PROJECT_DIR$/app 2/character_generation - Copy.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app 2/character_generation.py" beforeDir="false" afterPath="$PROJECT_DIR$/app 2/character_generation.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app 2/image_generation.py" beforeDir="false" afterPath="$PROJECT_DIR$/app 2/image_generation.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app 2/imagecaption.py" beforeDir="false" afterPath="$PROJECT_DIR$/app 2/imagecaption.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app 2/import_export.py" beforeDir="false" afterPath="$PROJECT_DIR$/app 2/import_export.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app 2/koboldcpp - webui.py" beforeDir="false" afterPath="$PROJECT_DIR$/app 2/koboldcpp - webui.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app 2/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/app 2/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app 2/prompts/prompt_example.py" beforeDir="false" afterPath="$PROJECT_DIR$/app 2/prompts/prompt_example.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app 2/prompts/prompt_greeting.py" beforeDir="false" afterPath="$PROJECT_DIR$/app 2/prompts/prompt_greeting.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app 2/prompts/prompt_name.py" beforeDir="false" afterPath="$PROJECT_DIR$/app 2/prompts/prompt_name.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app 2/prompts/prompt_nonnsfw_summary.py" beforeDir="false" afterPath="$PROJECT_DIR$/app 2/prompts/prompt_nonnsfw_summary.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app 2/prompts/prompt_personality.py" beforeDir="false" afterPath="$PROJECT_DIR$/app 2/prompts/prompt_personality.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app 2/prompts/prompt_scenario.py" beforeDir="false" afterPath="$PROJECT_DIR$/app 2/prompts/prompt_scenario.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app 2/prompts/prompt_summary.py" beforeDir="false" afterPath="$PROJECT_DIR$/app 2/prompts/prompt_summary.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app 2/ui.py" beforeDir="false" afterPath="$PROJECT_DIR$/app 2/ui.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app 2/utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/app 2/utils.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/koboldcpp - webui.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/koboldcpp - webui.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app 2/vector.py" beforeDir="false" afterPath="$PROJECT_DIR$/app 2/vector.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app 2/wiki.py" beforeDir="false" afterPath="$PROJECT_DIR$/app 2/wiki.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -99,7 +90,7 @@
     "git-widget-placeholder": "master",
     "ignore.virus.scanning.warn.message": "true",
     "last_opened_file_path": "G:/Documents/GitHub/character-factory/app",
-    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
+    "settings.editor.selected.configurable": "preferences.pluginManager"
   }
 }]]></component>
   <component name="RecentsManager">

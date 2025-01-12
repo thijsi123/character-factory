@@ -129,20 +129,18 @@ def create_webui():
                         outputs=scenario,
                     )
                 with gr.Row():
-                    first_greeting_message = gr.Textbox(
+                    greeting_message = gr.Textbox(
                         placeholder="character greeting message",
-                        label="greeting message",
-                        interactive=True
+                        label="greeting message"
                     )
-                    greeting_message_button = gr.Button("Generate character greeting message with LLM")
+                    greeting_message_button = gr.Button(
+                        "Generate character greeting message with LLM"
+                    )
                     greeting_message_button.click(
                         handle_greeting_message_button_click,
                         inputs=[name, summary, personality, topic],
-                        outputs=first_greeting_message,
+                        outputs=greeting_message,
                     )
-
-                # But what about the actual 'greeting_message' field if you want a second one?
-
                 with gr.Row():
                     with gr.Column():
                         switch_function_checkbox = gr.Checkbox(label="Use alternate example message generation",
@@ -207,16 +205,14 @@ def create_webui():
                             ],
                             outputs=image_input,
                         )
-        alternate_greetings = []
-
-        with gr.Tab("Alternative Greeting Messages"):
+        #alternative greetings up to 20
+        with gr.Tab("Greeting Messages"):
             for i in range(1, 21):  # Loop to create 20 alternative greeting messages
                 with gr.Row():
                     greeting_message = gr.Textbox(
                         placeholder=f"alternate character greeting message {i}",
                         label=f"Alternate Greeting Message {i}"
                     )
-                    alternate_greetings.append(greeting_message)  # Add to the list
                     greeting_message_button = gr.Button(
                         f"Generate alternate character greeting message with LLM {i}"
                     )
@@ -225,7 +221,6 @@ def create_webui():
                         inputs=[name, summary, personality, topic],
                         outputs=greeting_message,
                     )
-
         with gr.Tab("Wiki Character"):
             with gr.Column():
                 wiki_url = gr.Textbox(label="Fandom Wiki URL", placeholder="Enter the URL of the character's wiki page")
@@ -294,9 +289,8 @@ def create_webui():
                         summary,
                         personality,
                         scenario,
-                        first_greeting_message,
                         greeting_message,
-                        example_messages
+                        example_messages,
                     ],
                 )
                 import_json_button.click(
@@ -307,12 +301,10 @@ def create_webui():
                         summary,
                         personality,
                         scenario,
-                        first_greeting_message,
                         greeting_message,
-                        example_messages
+                        example_messages,
                     ],
                 )
-
         with gr.Tab("Export character"):
             with gr.Column():
                 with gr.Row():
@@ -326,34 +318,27 @@ def create_webui():
                     export_card_button.click(
                         export_character_card,
                         inputs=[
-                            name,  # 1
-                            summary,  # 2
-                            personality,  # 3
-                            scenario,  # 4
-                            first_greeting_message,  # 5
-                            greeting_message,  # 6
-                            example_messages,  # 7
-                            *alternate_greetings
+                            name,
+                            summary,
+                            personality,
+                            scenario,
+                            greeting_message,
+                            example_messages,
                         ],
                         outputs=export_image,
-
                     )
-                    # This button call exports to JSON
                     export_json_button.click(
                         export_as_json,
                         inputs=[
-                            name,  # 1
-                            summary,  # 2
-                            personality,  # 3
-                            scenario,  # 4
-                            first_greeting_message,  # 5
-                            greeting_message,  # 6
-                            example_messages,  # 7
-                            *alternate_greetings
+                            name,
+                            summary,
+                            personality,
+                            scenario,
+                            greeting_message,
+                            example_messages,
                         ],
                         outputs=export_json_textbox,
                     )
-
         gr.HTML("""<div style='text-align: center; font-size: 20px;'>
             <p>
               <a style="text-decoration: none; color: inherit;" href="https://github.com/thijsi123/character-factory">Character Factory</a> 
