@@ -5,6 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="cddb8e47-998b-41f9-bb95-e53d6af67c3d" name="Changes" comment="">
+<<<<<<< HEAD
       <change afterPath="$PROJECT_DIR$/app 2/aicharl.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
@@ -27,6 +28,9 @@
       <change beforePath="$PROJECT_DIR$/app 2/utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/app 2/utils.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app 2/vector.py" beforeDir="false" afterPath="$PROJECT_DIR$/app 2/vector.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app 2/wiki.py" beforeDir="false" afterPath="$PROJECT_DIR$/app 2/wiki.py" afterDir="false" />
+=======
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+>>>>>>> 75df6e83ac53439b582078dd2274b2e7b5a5c745
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

@@ -1,4 +1,4 @@
-# Character factory
+# Character factory - Personal experimental project that works only with koboldcpp for now 🍴
 
 <p>WebUI Supports <a href="https://github.com/oobabooga/text-generation-webui" style="color: blue; text-decoration: underline;" target="_blank">oobabooga/text-generation-webui</a></p>
 
