@@ -14,7 +14,7 @@
 
 > **⚠️ For Local Model Support:** Currently use the **[Experimental](https://github.com/thijsi123/character-factory/tree/Experimental)** branch as it contains the working local model code. The `local-models` branch is a work-in-progress refactor that will eventually replace the experimental code.
 
-## Quick Setup (Recommended)
+## Quick Setup (Recommended) If these fail use the manual setup below.
 
 ### Windows
 1. git pull https://github.com/thijsi123/character-factory
@@ -36,8 +36,6 @@
 3. Next time just run: `./run-mac.sh`
 
 > **Note:** macOS support is experimental and untested. I don't have access to Mac hardware, so I cannot provide support or troubleshooting for macOS-specific issues. Community contributions are welcome!
-
->If these fail use the manual setup below.
 ---
 
 This Python script is designed to help you generate characters for [SillyTavern](https://github.com/SillyTavern/SillyTavern), [TavernAI](https://github.com/TavernAI/TavernAI), [TextGenerationWebUI](https://github.com/oobabooga/text-generation-webui) and many more, using LLM (Large Language Model) and Stable Diffusion. The script utilizes various deep learning models to create detailed character cards, including names, summaries, personalities, greeting messages, and character avatars.
