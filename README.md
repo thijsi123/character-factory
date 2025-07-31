@@ -5,25 +5,31 @@
 > This project is no longer actively maintained. It is read-only. You can still fork it and use it as you wish, but there will be no further updates or support from the author.
 
 
-WebUI for Power Users:
-<a target="_blank" href="https://colab.research.google.com/drive/1WvU3wS7NgmElwNycQ344HGKYrQmDbWj4">
-  <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/>
-</a>
+## Quick Setup (Recommended)
 
-WebUI using Mistral 7b instruct 0.1:
-<a target="_blank" href="https://colab.research.google.com/drive/108koWoCDGaLZhZ0eV-gFuWtsnnLFMeCB">
-  <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/>
-</a>
+### Windows
+1. git pull https://github.com/thijsi123/character-factory
+2. cd character-factory
+3. Double-click `windows-allinone.bat`
+4. Follow the prompts - it handles everything automatically!
+5. Choose your preferred WebUI from the menu
 
-WebUI using Zephyr 7B beta:
-<a target="_blank" href="https://colab.research.google.com/drive/1JqkrtFXKalcmuMvST2VltoS1UVwoQINH">
-  <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/>
-</a>
+### Linux  
+1. git pull https://github.com/thijsi123/character-factory
+2. cd character-factory
+3. Run: `chmod +x *.sh && ./linux-allinone.sh`
+4. Follow the prompts - it handles everything automatically!
+5. Choose your preferred WebUI from the menu
 
-Character Editor (manual editing without AI):
-<a target="_blank" href="https://colab.research.google.com/drive/1wWCQ3fRa-rpaDKAdE__YRMUK31mLU81k">
-  <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/>
-</a>
+### macOS (Experimental - Limited Support)
+1. Download `install-mac.sh` and `run-mac.sh` from the repository
+2. Run: `chmod +x *.sh && ./install-mac.sh`
+3. Next time just run: `./run-mac.sh`
+
+> **Note:** macOS support is experimental and untested. I don't have access to Mac hardware, so I cannot provide support or troubleshooting for macOS-specific issues. Community contributions are welcome!
+
+>If these fail use the manual setup below.
+---
 
 This Python script is designed to help you generate characters for [SillyTavern](https://github.com/SillyTavern/SillyTavern), [TavernAI](https://github.com/TavernAI/TavernAI), [TextGenerationWebUI](https://github.com/oobabooga/text-generation-webui) and many more, using LLM (Large Language Model) and Stable Diffusion. The script utilizes various deep learning models to create detailed character cards, including names, summaries, personalities, greeting messages, and character avatars.
 
@@ -52,21 +58,6 @@ In addition to the AI-powered character generation, Character Factory includes a
 - Fine-tuning AI-generated characters
 - Converting between character formats (JSON ↔ Character Cards)
 
-### Running Character Editor
-You can use the Character Editor in two ways:
-
-**Option 1: Google Colab (no installation required)**
-<a target="_blank" href="https://colab.research.google.com/drive/1wWCQ3fRa-rpaDKAdE__YRMUK31mLU81k">
-  <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/>
-</a>
-
-**Option 2: Local installation**
-After setting up your environment (following the installation steps below), you can run the character editor with:
-```
-python ./app/character-editor.py
-```
-Then go to http://localhost:7860/ in your browser
-
 The Character Editor provides:
 - **Edit tab**: Create or modify character properties (name, summary, personality, scenario, greeting message, example messages) and upload character avatars
 - **Import tab**: Load existing characters from character card files (.png) or JSON files (.json)
@@ -79,15 +70,12 @@ For advanced users, there is a "Power User" version of the WebUI that provides m
 - **Custom Models**: Specify any GGUF-compatible LLM from a Hugging Face URL and any Stable Diffusion model from Hugging Face.
 - **Prompt Editing**: Edit all the prompts used for generating character attributes directly in the UI.
 
-### Running Power User WebUI
-After setting up your environment (following the installation steps below), you can run the power user webui with:
-```
-python ./app/main-poweruser-webui.py
-```
-Then go to http://localhost:7860/ in your browser
+## Manual Setup (Advanced Users or when the quick allinone files fail)
+<details>
+<summary>Click to expand manual installation steps</summary>
 
-## Running WebUI locally
-### CPU
+### Running WebUI locally
+#### CPU
 1. download miniconda from https://docs.conda.io/projects/miniconda/en/latest/
 2. familiarize yourself with how conda works https://conda.io/projects/conda/en/latest/user-guide/getting-started.html
 3. Download Git (if you don't have it already) https://git-scm.com/
@@ -126,6 +114,7 @@ or for power users:
 ```
 python ./app/main-poweruser-webui.py
 ```
+
 Then go to the link http://localhost:7860/ in your browser
 
 ***Later, the next time you run it, you don't need to create a new environment, just repeat step 5. and type in (in the conda command prompt)***
@@ -133,7 +122,7 @@ Then go to the link http://localhost:7860/ in your browser
 conda activate character-factory
 ```
 
-### Cuda
+#### Cuda
 1. download miniconda from https://docs.conda.io/projects/miniconda/en/latest/
 2. familiarize yourself with how conda works https://conda.io/projects/conda/en/latest/user-guide/getting-started.html
 3. Download Git (if you don't have it already) https://git-scm.com/
@@ -176,7 +165,7 @@ python ./app/main-poweruser-webui.py
 ```
 Then go to the link http://localhost:7860/ in your browser
 
-### Metal (Mac M1/M2/M3)
+#### Metal (Mac M1/M2/M3)
 1. download miniconda from https://docs.conda.io/projects/miniconda/en/latest/
 2. familiarize yourself with how conda works https://conda.io/projects/conda/en/latest/user-guide/getting-started.html
 3. Download Git (if you don't have it already) https://git-scm.com/
@@ -226,8 +215,8 @@ Then go to the link http://localhost:7860/ in your browser
 conda activate character-factory
 ```
 
-## Running the script locally
-### CPU
+### Running the script locally
+#### CPU
 1. download miniconda from https://docs.conda.io/projects/miniconda/en/latest/
 2. familiarize yourself with how conda works https://conda.io/projects/conda/en/latest/user-guide/getting-started.html
 3. Download Git (if you don't have it already) https://git-scm.com/
@@ -265,7 +254,7 @@ python ./app/main-mistral.py --name "Albert Einstein" --topic "science" --avatar
 conda activate character-factory
 ```
 
-### CUDA
+#### CUDA
 1. download miniconda from https://docs.conda.io/projects/miniconda/en/latest/
 2. familiarize yourself with how conda works https://conda.io/projects/conda/en/latest/user-guide/getting-started.html
 3. Download Git (if you don't have it already) https://git-scm.com/
@@ -304,7 +293,7 @@ python ./app/main-mistral.py --name "Albert Einstein" --topic "science" --avatar
 conda activate character-factory
 ```
 
-### Metal (Mac M1/M2/M3)
+#### Metal (Mac M1/M2/M3)
 1. download miniconda from https://docs.conda.io/projects/miniconda/en/latest/
 2. familiarize yourself with how conda works https://conda.io/projects/conda/en/latest/user-guide/getting-started.html
 3. Download Git (if you don't have it already) https://git-scm.com/
@@ -335,7 +324,6 @@ CT_METAL=1 pip install ctransformers --no-binary ctransformers
 pip install -r requirements.txt
 ```
 
-
 and you can start using the script, for example like this:
 ```
 python ./app/main-mistral.py --name "Albert Einstein" --topic "science" --avatar-prompt "Albert Einstein"
@@ -348,47 +336,64 @@ conda activate character-factory
 
 #### When you run the script for the first time, the script will automatically download the required LLM and Stable Diffusion models
 
-## Generation options
-```--name``` This flag allows you to specify the character's name. If provided, the script will use the name you specify. If not provided, the script will use the Language Model (LLM) to generate a name for the character.
+</details>
 
-```--gender``` Use this parameter to specify the character's gender. If provided, the script will use the specified gender. Otherwise, LLM will choose the gender.
+## Colab usage (Legacy - May be deprecated in future versions)
 
-```--summary``` Use this flag to specify the character's summary. If you provide a summary, it will be used for the character. If not provided, the script will use LLM to generate a summary for the character.
+WebUI for Power Users:
+<a target="_blank" href="https://colab.research.google.com/drive/1WvU3wS7NgmElwNycQ344HGKYrQmDbWj4">
+  <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/>
+</a>
 
-```--personality``` This flag lets you specify the character's personality. If you provide a personality description, it will be used. If not provided, the script will use LLM to generate a personality description for the character.
-
-```--greeting-message``` Use this flag to specify the character's greeting message for interacting with users. If provided, the script will use the specified greeting message. If not provided, LLM will generate a greeting message for the character.
-
-```--avatar-prompt``` This flag allows you to specify the prompt for generating the character's avatar. If provided, the script will use the specified prompt for avatar generation. If not provided, the script will use LLM to generate the prompt for the avatar.
-
-```--topic``` Specify the topic for character generation using this flag. Topics can include "Fantasy", "Anime", "Noir style detective", "Old mage master of lightning", or any other topic relevant to your character. The topic can influence the character's details and characteristics.
-
-```--negative-prompt``` This flag is used to provide a negative prompt for Stable Diffusion. A negative prompt can be used to guide the generation of character avatars by specifying elements that should not be included in the avatar.
-
-```--scenario``` Use this flag to specify the character's scenario. If you provide a scenario, it will be used for the character. If not provided, the script will use LLM to generate a scenario for the character.
-
-```--example-messages``` Specify example messages for the character using this flag. If you provide example messages, they will be used for the character. If not provided, the script will use LLM to generate example messages for the character.
-
-## Colab usage
-1. Open the notebook in Google Colab by clicking one of those badges:
-
-version using Mistral 7b instruct 0.1:
+WebUI using Mistral 7b instruct 0.1:
 <a target="_blank" href="https://colab.research.google.com/drive/108koWoCDGaLZhZ0eV-gFuWtsnnLFMeCB">
   <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/>
 </a>
 
-version using Zephyr 7B beta:
+WebUI using Zephyr 7B beta:
 <a target="_blank" href="https://colab.research.google.com/drive/1JqkrtFXKalcmuMvST2VltoS1UVwoQINH">
   <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/>
 </a>
 
-3. After opening the link, you will see the notebook within the Google Colab environment.
-4. Make sure to check whether a GPU is selected for your environment. Running your script on a CPU will not work. To verify the GPU selection, follow these steps:
+Character Editor (manual editing without AI):
+<a target="_blank" href="https://colab.research.google.com/drive/1wWCQ3fRa-rpaDKAdE__YRMUK31mLU81k">
+  <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/>
+</a>
+
+<details>
+<summary>Click to expand Colab setup instructions</summary>
+
+1. Open the notebook in Google Colab by clicking one of those badges above
+2. After opening the link, you will see the notebook within the Google Colab environment.
+3. Make sure to check whether a GPU is selected for your environment. Running your script on a CPU will not work. To verify the GPU selection, follow these steps:
    1. Click on "Runtime" in the top menu.
    2. Change the CPU to one of these: T4 GPU, A100 GPU, V100 GPU
    3. Click "Save."
-5. After the environment starts, you need to run each cell in turn
-6. If everything is prepared, you can just run the last cell to generate characters
+4. After the environment starts, you need to run each cell in turn
+5. If everything is prepared, you can just run the last cell to generate characters
+
+</details>
+
+## Generation options
+`--name` This flag allows you to specify the character's name. If provided, the script will use the name you specify. If not provided, the script will use the Language Model (LLM) to generate a name for the character.
+
+`--gender` Use this parameter to specify the character's gender. If provided, the script will use the specified gender. Otherwise, LLM will choose the gender.
+
+`--summary` Use this flag to specify the character's summary. If you provide a summary, it will be used for the character. If not provided, the script will use LLM to generate a summary for the character.
+
+`--personality` This flag lets you specify the character's personality. If you provide a personality description, it will be used. If not provided, the script will use LLM to generate a personality description for the character.
+
+`--greeting-message` Use this flag to specify the character's greeting message for interacting with users. If provided, the script will use the specified greeting message. If not provided, LLM will generate a greeting message for the character.
+
+`--avatar-prompt` This flag allows you to specify the prompt for generating the character's avatar. If provided, the script will use the specified prompt for avatar generation. If not provided, the script will use LLM to generate the prompt for the avatar.
+
+`--topic` Specify the topic for character generation using this flag. Topics can include "Fantasy", "Anime", "Noir style detective", "Old mage master of lightning", or any other topic relevant to your character. The topic can influence the character's details and characteristics.
+
+`--negative-prompt` This flag is used to provide a negative prompt for Stable Diffusion. A negative prompt can be used to guide the generation of character avatars by specifying elements that should not be included in the avatar.
+
+`--scenario` Use this flag to specify the character's scenario. If you provide a scenario, it will be used for the character. If not provided, the script will use LLM to generate a scenario for the character.
+
+`--example-messages` Specify example messages for the character using this flag. If you provide example messages, they will be used for the character. If not provided, the script will use LLM to generate example messages for the character.
 
 ## Example usage:
 
