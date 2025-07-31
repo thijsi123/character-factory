@@ -1,9 +1,18 @@
 # Character Factory
 
 > [!WARNING]
-> ## ⚠️ This project has been archived ⚠️
-> This project is no longer actively maintained. It is read-only. You can still fork it and use it as you wish, but there will be no further updates or support from the author.
+> ## ⚠️ This project is HIGHLY experimental ⚠️
+> This project is super experimenal. I'm not a great programmer, so, a lot of the code is A.I. assisted.
 
+## Available Branches
+
+| Branch | Purpose | Status |
+|--------|---------|--------|
+| [master](https://github.com/thijsi123/character-factory/tree/master) | Clean upstream sync | ✅ Active |
+| [local-models](https://github.com/thijsi123/character-factory/tree/local-models) | KoboldCpp + Ollama support (refactored) | 🚧 In Development |
+| [Experimental](https://github.com/thijsi123/character-factory/tree/Experimental) | Previous experiments + current local model code | 📦 Archived |
+
+> **⚠️ For Local Model Support:** Currently use the **[Experimental](https://github.com/thijsi123/character-factory/tree/Experimental)** branch as it contains the working local model code. The `local-models` branch is a work-in-progress refactor that will eventually replace the experimental code.
 
 WebUI for Power Users:
 <a target="_blank" href="https://colab.research.google.com/drive/1WvU3wS7NgmElwNycQ344HGKYrQmDbWj4">
